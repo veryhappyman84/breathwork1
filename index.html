@@ -1,0 +1,883 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1320">
+<title>Дыхание · Пранаяма</title>
+<style>
+:root{
+  --bg:#f3f5fa; --surface:#ffffff; --surface2:#eef1f8; --text:#1c2232; --muted:#667087;
+  --line:#dde2ee; --accent:#3a74d6; --accent-ink:#ffffff; --accent-soft:#e3ecfb;
+  --ok:#23915f; --warn:#c9741c; --danger:#cf3f3f;
+  --inhale:#2fb3a6; --hold:#7c5cff; --exhale:#3a86e0; --pause:#7d8aa6; --pump:#f08a2c; --rest:#4fbf86;
+  --shadow:0 6px 24px rgba(20,30,60,.08);
+  --radius:18px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1220; --surface:#161b2b; --surface2:#1e2437; --text:#e7eaf4; --muted:#98a1b8;
+    --line:#2a3149; --accent:#6aa0ff; --accent-ink:#0e1220; --accent-soft:#1f2c4a;
+    --ok:#4cc58c; --warn:#f0a050; --danger:#ff6b6b; --shadow:0 6px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1220; --surface:#161b2b; --surface2:#1e2437; --text:#e7eaf4; --muted:#98a1b8;
+  --line:#2a3149; --accent:#6aa0ff; --accent-ink:#0e1220; --accent-soft:#1f2c4a;
+  --ok:#4cc58c; --warn:#f0a050; --danger:#ff6b6b; --shadow:0 6px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:84px}
+h1,h2,h3{line-height:1.25;margin:0 0 .5em}
+h1{font-size:1.35rem}
+h2{font-size:1.15rem}
+h3{font-size:1rem}
+p{margin:.4em 0 .8em}
+a{color:var(--accent)}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+header.top{display:flex;align-items:center;gap:10px;padding:14px 16px 4px;max-width:720px;margin:0 auto}
+header.top .logo{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--inhale),var(--hold));flex:none}
+header.top h1{margin:0;font-size:1.15rem}
+header.top .sub{color:var(--muted);font-size:.85rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:0 0 14px;box-shadow:var(--shadow)}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.8rem;font-weight:600}
+.pill.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.btn{appearance:none;border:0;border-radius:14px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer;background:var(--surface2);color:var(--text)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.big{width:100%;padding:16px;font-size:1.1rem;border-radius:16px}
+.btn.danger{background:color-mix(in srgb,var(--danger) 15%,transparent);color:var(--danger)}
+.btn.ghost{background:transparent;border:1px solid var(--line)}
+.rhythm{font-size:1.9rem;font-weight:700;letter-spacing:.02em;margin:.1em 0}
+.dots{display:flex;gap:8px;margin:12px 0 6px}
+.dot{flex:1;height:10px;border-radius:6px;background:var(--surface2);border:1px solid var(--line)}
+.dot.on{background:var(--ok);border-color:var(--ok)}
+.dot.today{outline:2px solid var(--ok);outline-offset:2px}
+.banner{border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:.92rem;display:flex;gap:10px;align-items:flex-start}
+.banner.warn{background:color-mix(in srgb,var(--warn) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warn) 40%,transparent)}
+.banner.info{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
+.banner .x{margin-left:auto;background:none;border:0;color:inherit;font-size:1.2rem;cursor:pointer;line-height:1}
+ol.steps{padding-left:1.2em;margin:.3em 0}
+ol.steps li{margin:.25em 0}
+
+/* nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:20}
+nav.tabs .in{display:flex;max-width:720px;width:100%}
+nav.tabs button{flex:1;background:none;border:0;color:var(--muted);font:inherit;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;cursor:pointer;border-radius:12px}
+nav.tabs button svg{width:24px;height:24px}
+nav.tabs button.active{color:var(--accent);background:var(--accent-soft)}
+section.view{display:none}
+section.view.active{display:block}
+
+/* program map */
+.tech{margin-bottom:16px}
+.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.lv{border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center;font-size:.72rem;background:var(--surface2);color:var(--muted)}
+.lv b{display:block;font-size:.85rem;color:var(--text)}
+.lv.done{background:color-mix(in srgb,var(--ok) 14%,var(--surface));border-color:color-mix(in srgb,var(--ok) 50%,transparent)}
+.lv.cur{background:var(--accent-soft);border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat{background:var(--surface2);border-radius:14px;padding:12px}
+.stat b{display:block;font-size:1.5rem}
+.hist{list-style:none;padding:0;margin:0}
+.hist li{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.hist li:last-child{border-bottom:0}
+
+/* medals */
+.medals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (min-width:560px){.medals{grid-template-columns:repeat(4,1fr)}}
+.medal{background:none;border:0;color:inherit;font:inherit;text-align:center;cursor:pointer;padding:6px 2px;border-radius:14px;position:relative}
+.medal svg{width:100%;max-width:110px;height:auto;display:block;margin:0 auto 6px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.18))}
+.medal.locked svg{filter:grayscale(1);opacity:.32}
+.medal .nm{font-size:.8rem;font-weight:600;line-height:1.2}
+.medal .cnt{position:absolute;top:4px;right:10%;background:var(--accent);color:var(--accent-ink);border-radius:999px;font-size:.72rem;font-weight:700;padding:1px 7px}
+.recent{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
+.recent svg{width:56px;height:56px;flex:none}
+
+/* theory */
+details{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:0 0 10px;box-shadow:var(--shadow)}
+details>summary{cursor:pointer;padding:14px 16px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"+";font-size:1.3rem;color:var(--muted)}
+details[open]>summary::after{content:"–"}
+details .body{padding:0 16px 14px}
+details .body ul,details .body ol{padding-left:1.2em}
+.tag{font-size:.75rem;color:var(--muted);font-weight:500}
+
+/* settings */
+.field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.field:last-child{border-bottom:0}
+.seg{display:flex;background:var(--surface2);border-radius:12px;padding:3px}
+.seg button{border:0;background:none;font:inherit;padding:7px 12px;border-radius:10px;cursor:pointer;color:var(--muted)}
+.seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.12);font-weight:600}
+input[type=number],input[type=time]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--text);width:96px}
+input[type=time]{width:140px}
+input[type=range]{width:140px}
+.switch{position:relative;width:48px;height:28px;flex:none}
+.switch input{opacity:0;width:0;height:0}
+.switch span{position:absolute;inset:0;background:var(--line);border-radius:999px;transition:.2s;cursor:pointer}
+.switch span::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.switch input:checked+span{background:var(--ok)}
+.switch input:checked+span::after{transform:translateX(20px)}
+.times{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.times .row{gap:8px}
+
+/* session overlay */
+#session{position:fixed;inset:0;background:var(--bg);z-index:50;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:20px 16px calc(20px + env(safe-area-inset-bottom))}
+#session.on{display:flex}
+#session .top{width:100%;max-width:520px;display:flex;justify-content:space-between;align-items:center}
+#session .stage{position:relative;width:min(78vw,340px);aspect-ratio:1;display:grid;place-items:center}
+#session .stage svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+#orb{width:82%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),transparent 55%),var(--orb,var(--inhale));box-shadow:0 0 60px color-mix(in srgb,var(--orb,var(--inhale)) 55%,transparent);will-change:transform;display:grid;place-items:center}
+#orbNum{font-size:3.2rem;font-weight:800;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.25)}
+#phaseLabel{font-size:1.6rem;font-weight:700;text-align:center;min-height:2.2em}
+#phaseSub{color:var(--muted);text-align:center;min-height:1.5em}
+.nostrils[hidden]{display:none}
+.nostrils{display:flex;gap:28px;justify-content:center;margin-top:6px;min-height:58px}
+.nos{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.8rem;color:var(--muted)}
+.nos i{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:block;transition:.25s}
+.nos.on i{background:var(--inhale);border-color:var(--inhale);box-shadow:0 0 16px var(--inhale)}
+.nos.on.ex i{background:var(--exhale);border-color:var(--exhale);box-shadow:0 0 16px var(--exhale)}
+.nos.off i{background:var(--surface2);border-style:dashed}
+#session .controls{display:flex;gap:10px;width:100%;max-width:520px}
+#session .controls .btn{flex:1}
+
+/* modal */
+#modal{position:fixed;inset:0;background:rgba(5,8,18,.55);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}
+#modal.on{display:flex}
+#modal .box{background:var(--surface);color:var(--text);border-radius:22px;max-width:460px;width:100%;max-height:88vh;overflow:auto;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center}
+#modal .box svg.medal-svg{width:130px;height:130px}
+.newmedals{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:12px 0}
+.newmedals div{width:120px}
+.newmedals svg{width:96px;height:96px;animation:pop .6s ease-out both}
+@keyframes pop{0%{transform:scale(.3) rotate(-20deg);opacity:0}70%{transform:scale(1.1)}100%{transform:none;opacity:1}}
+#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.9rem;z-index:70;opacity:0;pointer-events:none;transition:opacity .3s;max-width:calc(100% - 32px)}
+#toast.on{opacity:1}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="logo" aria-hidden="true"></div>
+  <div>
+    <h1>Дыхание</h1>
+    <div class="sub">Пранаяма шаг за шагом</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="view active" id="v-practice"></section>
+  <section class="view" id="v-progress"></section>
+  <section class="view" id="v-medals"></section>
+  <section class="view" id="v-theory"></section>
+  <section class="view" id="v-settings"></section>
+</main>
+
+<nav class="tabs">
+  <div class="in">
+    <button data-tab="practice" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>Практика</button>
+    <button data-tab="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M6 16l4-5 3 3 5-7"/></svg>Прогресс</button>
+    <button data-tab="medals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><path d="M8.5 9 6 3h4l2 4 2-4h4l-2.5 6"/></svg>Медали</button>
+    <button data-tab="theory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg>Теория</button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6A7 7 0 0 0 19 12z"/></svg>Настройки</button>
+  </div>
+</nav>
+
+<div id="session" role="dialog" aria-label="Сессия дыхания">
+  <div class="top">
+    <span class="pill" id="sTech"></span>
+    <span class="muted" id="sProgress"></span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+    <div id="phaseLabel">Приготовьтесь</div>
+    <div class="stage">
+      <svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47" fill="none" stroke="var(--line)" stroke-width="2.5"/><circle id="ringArc" cx="50" cy="50" r="47" fill="none" stroke="var(--orb,var(--inhale))" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="295.3" stroke-dashoffset="295.3"/></svg>
+      <div id="orb"><span id="orbNum"></span></div>
+    </div>
+    <div id="phaseSub"></div>
+    <div class="nostrils" id="nostrils" hidden>
+      <div class="nos" id="nosL"><i></i>левая</div>
+      <div class="nos" id="nosR"><i></i>правая</div>
+    </div>
+  </div>
+  <div class="controls">
+    <button class="btn ghost" id="btnPause">Пауза</button>
+    <button class="btn danger" id="btnStop">Завершить</button>
+  </div>
+</div>
+
+<div id="modal"><div class="box" id="modalBox"></div></div>
+<div id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ================= ДАННЫЕ ================= */
+const TECH = [
+  { id:'box', name:'Квадратное дыхание',
+    levels:[[4,4,4,4],[4,5,4,5],[4,6,4,6],[5,6,5,6],[6,6,6,6]],
+    legend:'вдох – задержка – выдох – пауза, сек',
+    fmt:l=>l.join(' – '),
+    how:['Сядьте ровно, плечи расслаблены, дышите носом.','Вдох на счёт — живот и грудь мягко наполняются.','Задержка на вдохе без напряжения в горле.','Плавный выдох на тот же счёт.','Пауза на выдохе — и новый цикл.'] },
+  { id:'av', name:'Анулома-вилома',
+    levels:[[4,0,4],[4,0,8],[4,4,8],[4,8,8],[5,10,10]],
+    legend:'вдох – задержка – выдох, сек',
+    fmt:l=>l.join(' – '),
+    how:['Правая рука в Вишну-мудре: указательный и средний пальцы согнуты.','Большой палец закрывает правую ноздрю, безымянный — левую.','Вдох левой → (задержка) → выдох правой.','Вдох правой → (задержка) → выдох левой. Это один цикл.','Подсказки на экране показывают, какая ноздря открыта.'] },
+  { id:'kb', name:'Капалабхати',
+    levels:[[20,2],[30,2],[40,1.5],[50,1],[60,1]],
+    legend:'выдохов за раунд · темп',
+    fmt:l=>`${l[0]} × 1 в ${String(l[1]).replace('.',',')} с`,
+    how:['Сядьте ровно, сделайте глубокий вдох.','Резкий короткий выдох носом за счёт толчка живота внутрь.','Вдох происходит сам, пассивно — не втягивайте воздух.','Плечи и грудь неподвижны, лицо расслаблено.','После раунда — 30 секунд спокойного дыхания.'] }
+];
+const LEVELS_PER_TECH = 5, DAYS_NEEDED = 7, WINDOW = 14;
+
+const MEDALS = [
+  {id:'first',    name:'Первый вдох',              cond:'Завершить первую сессию',                         c1:'#ffe08a', c2:'#e8962a'},
+  {id:'panther',  name:'Самый быстрый и сильный',  cond:'7 дней практики подряд без пропусков',            c1:'#c4a2ff', c2:'#4f22a8'},
+  {id:'wolf',     name:'Стая',                     cond:'14 дней практики подряд',                         c1:'#a9bedc', c2:'#33496c'},
+  {id:'elephant', name:'Несокрушимый',             cond:'30 дней практики всего',                          c1:'#9fb0bf', c2:'#4a5866'},
+  {id:'lion',     name:'Царь дыхания',             cond:'100 завершённых сессий',                          c1:'#ffd98a', c2:'#b8690c'},
+  {id:'lark',     name:'Ранняя пташка',            cond:'Сессия, начатая до 8:00',                         c1:'#ffd3a0', c2:'#f0704a'},
+  {id:'owl',      name:'Ночной страж',             cond:'Сессия, начатая после 22:00',                     c1:'#6f80d8', c2:'#1a2360'},
+  {id:'turtle',   name:'Спокойствие',              cond:'Освоить квадратное дыхание (все 5 уровней)',      c1:'#9be8bb', c2:'#21794c'},
+  {id:'swan',     name:'Равновесие',               cond:'Освоить анулома-вилому (все 5 уровней)',          c1:'#9fdcff', c2:'#2378b4'},
+  {id:'dragon',   name:'Внутренний огонь',         cond:'Освоить капалабхати (все 5 уровней)',             c1:'#ffa47e', c2:'#a3202c'},
+  {id:'whale',    name:'Глубокое дыхание',         cond:'Одна сессия длительностью 10 минут и больше',     c1:'#8fdcec', c2:'#164f78'},
+  {id:'phoenix',  name:'Возрождение',              cond:'Вернуться к практике после сброса счётчика',      c1:'#ffcf7a', c2:'#d43a26'},
+  {id:'star',     name:'Шаг вперёд',               cond:'Пройти уровень — выдаётся за каждый',             c1:'#fff3b0', c2:'#c99500'}
+];
+const MASTERY = ['turtle','swan','dragon'];
+
+/* ================= ХРАНЕНИЕ ================= */
+const LS_STATE='bw1.state', LS_SET='bw1.settings', LS_REM='bw1.remFired';
+const DEF_STATE = {v:1, tech:0, level:0, levelStart:null, levelDays:[], allDays:[], sessions:0,
+  medals:{}, pendingPhoenix:false, history:[], notice:null, finished:false};
+const DEF_SET = {mode:'cycles', cycles:3, minutes:3, phaseSound:true, volume:0.6, remindersOn:false, reminders:['08:00','20:00'], theme:'auto'};
+function load(k,def){ try{ const v=JSON.parse(localStorage.getItem(k)); return v?Object.assign(structuredClone(def),v):structuredClone(def);}catch(e){return structuredClone(def);} }
+function save(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+let S = load(LS_STATE, DEF_STATE);
+let SET = load(LS_SET, DEF_SET);
+const saveS=()=>save(LS_STATE,S), saveSet=()=>save(LS_SET,SET);
+
+/* ================= ДАТЫ ================= */
+const BW = window.BW = {now:null, speed:1};
+const nowDate = ()=> BW.now ? new Date(BW.now) : new Date();
+const keyOf = d => d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const today = ()=> keyOf(nowDate());
+function utc(k){const [y,m,d]=k.split('-').map(Number);return Date.UTC(y,m-1,d);}
+const diff=(a,b)=>Math.round((utc(b)-utc(a))/864e5);
+function addDays(k,n){return new Date(utc(k)+n*864e5).toISOString().slice(0,10);}
+function fmtDate(k){const [y,m,d]=k.split('-');return `${d}.${m}.${y}`;}
+const plural=(n,a,b,c)=>{const m10=n%10,m100=n%100;return m10===1&&m100!==11?a:(m10>=2&&m10<=4&&(m100<10||m100>=20)?b:c);};
+
+/* ================= ЛОГИКА ПРОГРЕССА ================= */
+function evaluate(t){
+  if(!S.levelDays.length) return {ok:true};
+  const last=S.levelDays[S.levelDays.length-1];
+  const skipped=diff(last,t)-1;
+  if(skipped>=2) return {ok:false, reason:`пропущено ${skipped} ${plural(skipped,'день','дня','дней')} подряд (можно не больше 1)`};
+  const need=DAYS_NEEDED-S.levelDays.length;
+  const windowEnd=addDays(S.levelStart,WINDOW-1);
+  const avail = (last===t) ? diff(t,windowEnd) : diff(t,windowEnd)+1;
+  if(need>0 && avail<need) return {ok:false, reason:'за 14 дней не набирается 7 дней практики'};
+  return {ok:true};
+}
+function applyEvaluation(t){
+  const r=evaluate(t);
+  if(!r.ok){
+    const lvl=`${TECH[S.tech].name}, уровень ${S.level+1}`;
+    S.notice={date:t, text:`Счётчик дней обнулён: ${r.reason}. Уровень сохранён (${lvl}) — начните отсчёт 7 дней заново.`};
+    S.levelDays=[]; S.levelStart=null; S.pendingPhoenix=true;
+    saveS();
+  }
+}
+function streakEnding(t){const set=new Set(S.allDays);let n=0,k=t;while(set.has(k)){n++;k=addDays(k,-1);}return n;}
+function bestStreak(){let best=0,cur=0,prev=null;for(const k of [...S.allDays].sort()){cur=(prev&&diff(prev,k)===1)?cur+1:1;best=Math.max(best,cur);prev=k;}return best;}
+function currentStreak(){const t=today();return streakEnding(t)||streakEnding(addDays(t,-1));}
+
+function completeSession(durSec, startHour){
+  const t=today();
+  applyEvaluation(t);
+  const fresh=[]; let levelUp=null;
+  const award=id=>{
+    if(!S.medals[id]){S.medals[id]={first:t,count:1};fresh.push(id);}
+    else if(id==='star'){S.medals[id].count++;fresh.push(id);}
+  };
+  S.sessions++;
+  if(!S.allDays.includes(t)){S.allDays.push(t);S.allDays.sort();}
+  S.history.unshift({date:t, tech:S.tech, level:S.level, dur:Math.round(durSec), ts:nowDate().getTime()});
+  S.history=S.history.slice(0,300);
+  award('first');
+  if(S.pendingPhoenix){award('phoenix');S.pendingPhoenix=false;}
+  let dayCounted=false;
+  if(!S.finished && !S.levelDays.includes(t)){
+    if(!S.levelDays.length) S.levelStart=t;
+    S.levelDays.push(t); dayCounted=true;
+  }
+  if(!S.finished && S.levelDays.length>=DAYS_NEEDED){
+    levelUp={fromTech:S.tech, fromLevel:S.level};
+    award('star');
+    if(S.level<LEVELS_PER_TECH-1){S.level++;}
+    else{
+      award(MASTERY[S.tech]);
+      if(S.tech<TECH.length-1){S.tech++;S.level=0;levelUp.newTech=true;}
+      else{S.finished=true;levelUp.all=true;}
+    }
+    S.levelDays=[];S.levelStart=null;
+  }
+  const st=streakEnding(t);
+  if(st>=7) award('panther');
+  if(st>=14) award('wolf');
+  if(S.allDays.length>=30) award('elephant');
+  if(S.sessions>=100) award('lion');
+  if(startHour<8) award('lark');
+  if(startHour>=22) award('owl');
+  if(durSec>=600) award('whale');
+  saveS();
+  return {fresh, levelUp, dayCounted};
+}
+
+/* ================= МЕДАЛИ (SVG) ================= */
+let uid=0;
+function star(cx,cy,ro,ri,n,fill,extra=''){
+  let p=[];for(let i=0;i<n*2;i++){const r=i%2?ri:ro,a=-Math.PI/2+i*Math.PI/n;p.push((cx+r*Math.cos(a)).toFixed(1)+','+(cy+r*Math.sin(a)).toFixed(1));}
+  return `<polygon points="${p.join(' ')}" fill="${fill}" ${extra}/>`;
+}
+const ART = {
+  first:()=>`<circle cx="50" cy="56" r="15" fill="#ffe14d"/><circle cx="50" cy="38" r="11" fill="#ffe14d"/>
+    <path d="M48 28 Q50 22 54 26" stroke="#ffe14d" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <circle cx="46" cy="36" r="1.9" fill="#2a1a00"/><circle cx="54" cy="36" r="1.9" fill="#2a1a00"/>
+    <path d="M46.5 40 L53.5 40 L50 45 Z" fill="#ff7a1a"/>
+    <path d="M28 62 L34 57 L40 63 L46 57 L52 63 L58 57 L64 63 L70 57 L72 68 Q50 84 28 68 Z" fill="#fffaf0"/>`,
+  panther:()=>`<circle cx="35" cy="35" r="7" fill="#15121c"/><circle cx="65" cy="35" r="7" fill="#15121c"/>
+    <circle cx="35" cy="35" r="3" fill="#3d3150"/><circle cx="65" cy="35" r="3" fill="#3d3150"/>
+    <path d="M50 30 C66 30 72 42 71 52 C70 64 60 72 50 72 C40 72 30 64 29 52 C28 42 34 30 50 30 Z" fill="#15121c"/>
+    <ellipse cx="41" cy="48" rx="5" ry="3.6" fill="#d8f25a"/><ellipse cx="59" cy="48" rx="5" ry="3.6" fill="#d8f25a"/>
+    <ellipse cx="41" cy="48" rx="1.2" ry="3.2" fill="#111"/><ellipse cx="59" cy="48" rx="1.2" ry="3.2" fill="#111"/>
+    <path d="M46 57 L54 57 L50 61 Z" fill="#5a4870"/>
+    <path d="M50 61 L50 64 M50 64 Q46 67 43 65 M50 64 Q54 67 57 65" stroke="#5a4870" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M39 60 L25 57 M39 62 L26 64 M61 60 L75 57 M61 62 L74 64" stroke="rgba(255,255,255,.55)" stroke-width=".8"/>`,
+  wolf:()=>`<path d="M30 25 L42 41 L58 41 L70 25 L71 50 L50 77 L29 50 Z" fill="#e1e8f1"/>
+    <path d="M33 32 L40 41 L35 44 Z M67 32 L60 41 L65 44 Z" fill="#8c9bb2"/>
+    <path d="M42 56 L50 77 L58 56 L50 51 Z" fill="#ffffff"/>
+    <path d="M37 50 L46 47 L44 52 Z M63 50 L54 47 L56 52 Z" fill="#1c2840"/>
+    <path d="M46 66 L54 66 L50 71 Z" fill="#1c2840"/>`,
+  elephant:()=>`<ellipse cx="31" cy="46" rx="12" ry="15" fill="#e6ecf2"/><ellipse cx="69" cy="46" rx="12" ry="15" fill="#e6ecf2"/>
+    <ellipse cx="31" cy="46" rx="8" ry="11" fill="#c5d0da"/><ellipse cx="69" cy="46" rx="8" ry="11" fill="#c5d0da"/>
+    <path d="M42 56 L37 65 M58 56 L63 65" stroke="#fffdf2" stroke-width="3.4" stroke-linecap="round"/>
+    <circle cx="50" cy="44" r="16" fill="#f0f4f8"/>
+    <path d="M50 52 Q49 66 54 72 Q58 76 62 72" stroke="#f0f4f8" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <circle cx="44" cy="42" r="2" fill="#2b3640"/><circle cx="56" cy="42" r="2" fill="#2b3640"/>`,
+  lion:()=>`${star(50,50,32,24,18,'#9c4a14')}<circle cx="50" cy="50" r="24" fill="#d27a26"/>
+    <circle cx="38" cy="38" r="5" fill="#f4c06a"/><circle cx="62" cy="38" r="5" fill="#f4c06a"/>
+    <circle cx="50" cy="52" r="15" fill="#f7cb72"/>
+    <circle cx="44" cy="49" r="1.9" fill="#3a2108"/><circle cx="56" cy="49" r="1.9" fill="#3a2108"/>
+    <path d="M46 55 L54 55 L50 59 Z" fill="#6b3a1a"/>
+    <path d="M50 59 Q47 63 44 61 M50 59 Q53 63 56 61" stroke="#6b3a1a" stroke-width="1.3" fill="none" stroke-linecap="round"/>`,
+  lark:()=>`${star(66,33,14,10,12,'#ffe9a0')}<circle cx="66" cy="33" r="9" fill="#fff4c2"/>
+    <path d="M22 70 L30 60 Q36 48 50 50 Q60 52 62 60 Q52 70 36 66 Z" fill="#7a4a2a"/>
+    <circle cx="58" cy="52" r="7" fill="#7a4a2a"/>
+    <path d="M64 50.5 L72 53 L64 55.5 Z" fill="#ffb347"/>
+    <circle cx="59.5" cy="50.5" r="1.5" fill="#fff"/>
+    <path d="M37 57 Q46 48 54 58 Q46 61 37 57 Z" fill="#b07a46"/>
+    <path d="M22 77 L78 77" stroke="#fff4c2" stroke-width="2" stroke-linecap="round" opacity=".8"/>`,
+  owl:()=>`<circle cx="26" cy="32" r="1.4" fill="#fff4c2"/><circle cx="74" cy="40" r="1.2" fill="#fff4c2"/><circle cx="30" cy="70" r="1" fill="#fff4c2"/><circle cx="72" cy="68" r="1.4" fill="#fff4c2"/>
+    <path d="M34 42 L32 27 L42 35 Q50 32 58 35 L68 27 L66 42 Q72 60 60 73 Q50 79 40 73 Q28 60 34 42 Z" fill="#8a6a4a"/>
+    <ellipse cx="50" cy="62" rx="10" ry="11" fill="#c9a77f"/>
+    <circle cx="43" cy="45" r="7" fill="#fff"/><circle cx="57" cy="45" r="7" fill="#fff"/>
+    <circle cx="43" cy="45" r="3.6" fill="#ffb800"/><circle cx="57" cy="45" r="3.6" fill="#ffb800"/>
+    <circle cx="43" cy="45" r="1.8" fill="#111"/><circle cx="57" cy="45" r="1.8" fill="#111"/>
+    <path d="M48 51 L52 51 L50 56 Z" fill="#ffb800"/>`,
+  turtle:()=>`<path d="M23 61 L16 64 L23 66 Z" fill="#c2eeae"/>
+    <ellipse cx="72" cy="56" rx="7.5" ry="6.5" fill="#c2eeae"/>
+    <ellipse cx="35" cy="66" rx="5.5" ry="4.5" fill="#c2eeae"/><ellipse cx="59" cy="66" rx="5.5" ry="4.5" fill="#c2eeae"/>
+    <path d="M23 64 Q25 37 46 35 Q67 37 68 64 Z" fill="#2f6c40"/>
+    <path d="M36 50 L46 44 L56 50 L56 60 L46 64 L36 60 Z M46 44 L46 36 M36 50 L27 48 M56 50 L65 47 M36 60 L29 64 M56 60 L63 64" fill="none" stroke="#a6d98a" stroke-width="1.6"/>
+    <path d="M23 64 L68 64" stroke="#a6d98a" stroke-width="2.6" stroke-linecap="round"/>
+    <circle cx="74.5" cy="54.5" r="1.4" fill="#123"/>`,
+  swan:()=>`<path d="M48 61 Q38 46 46 34 Q52 26 58 32" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <circle cx="57" cy="31" r="5" fill="#fff"/>
+    <path d="M61 29.5 L70 33 L61 34.5 Z" fill="#ff8a2a"/>
+    <circle cx="57.5" cy="30" r="1.2" fill="#123"/>
+    <path d="M24 62 Q30 74 50 74 Q70 74 77 57 Q66 64 56 60 Q50 54 44 58 Q34 62 24 62 Z" fill="#fff"/>
+    <path d="M46 64 Q58 55 71 61 Q60 68 46 64 Z" fill="#dcebf6"/>
+    <path d="M22 79 Q30 76 38 79 T54 79 T70 79 T80 79" stroke="#e4f6ff" stroke-width="2" fill="none" opacity=".85"/>`,
+  dragon:()=>`<path d="M68 57 Q78 52 84 58 Q77 59 82 65 Q73 62 67 64 Z" fill="#ffd25a"/>
+    <path d="M70 58 Q76 56 79 59 Q75 60 77 63 Q72 61 69 62 Z" fill="#ff7a2a"/>
+    <path d="M26 64 L30 50 L24 37 L38 44 L46 33 L50 42 L60 40 L70 48 L72 56 L62 58 L68 64 L50 66 L40 72 Z" fill="#2fa36b"/>
+    <path d="M50 66 L62 58 L68 64 Z" fill="#a6e8b8"/>
+    <path d="M31 56 L24 58 L31 60 Z M35 66 L28 71 L36 70 Z" fill="#1b7448"/>
+    <ellipse cx="56" cy="47" rx="3.2" ry="2.3" fill="#ffe14d"/><ellipse cx="56" cy="47" rx=".9" ry="2" fill="#111"/>
+    <circle cx="68" cy="51" r="1.1" fill="#0d3b25"/>`,
+  whale:()=>`<path d="M52 36 Q50 28 45 25 M52 36 Q52 26 52 21 M52 36 Q54 28 59 25" stroke="#eafcff" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+    <path d="M18 45 L28 52 L21 61 L32 56 Q36 67 55 67 Q75 67 79 53 Q77 38 56 38 Q38 38 32 52 Z" fill="#1d4f7a"/>
+    <path d="M37 59 Q50 66 72 60 Q62 67 52 67 Q41 66 37 59 Z" fill="#cfeaf7"/>
+    <circle cx="67" cy="50" r="1.9" fill="#fff"/><circle cx="67.4" cy="50.3" r="1" fill="#0b2236"/>
+    <path d="M65 56 Q71 57 76 54" stroke="#0b2236" stroke-width="1" fill="none" stroke-linecap="round"/>`,
+  phoenix:()=>{const w=`<path d="M50 53 Q36 30 17 29 Q29 37 27 45 Q19 43 15 48 Q29 52 36 61 Z" fill="#ffd25a"/><path d="M50 55 Q40 40 28 38 Q34 44 33 50 Q28 49 25 52 Q35 55 40 61 Z" fill="#ff8a2a"/>`;
+    return `${w}<g transform="translate(100 0) scale(-1 1)">${w}</g>
+    <path d="M46 62 Q39 74 44 83 Q48 75 50 79 Q52 75 56 83 Q61 74 54 62 Z" fill="#ffb02e"/>
+    <path d="M50 36 Q56 44 54 58 Q52 64 50 67 Q48 64 46 58 Q44 44 50 36 Z" fill="#ff5a24"/>
+    <path d="M50 32 Q48 24 52 19 Q52 26 55.5 28 Z" fill="#ffd25a"/>
+    <circle cx="50" cy="36" r="4.6" fill="#ff7a32"/>
+    <path d="M52.5 35.5 L57 37 L52.5 38.3 Z" fill="#ffe14d"/><circle cx="51" cy="35.2" r="1" fill="#2a0a00"/>`;},
+  star:()=>`${star(50,51,29,12.5,5,'#fff6c8','stroke="#e8b400" stroke-width="1.6" stroke-linejoin="round"')}${star(50,51,14,6,5,'#ffd84a')}`
+};
+function medalSVG(m){
+  const g='md'+(++uid);
+  return `<svg class="medal-svg" viewBox="0 0 100 100" role="img" aria-label="${m.name}">
+  <defs>
+   <radialGradient id="${g}a" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="${m.c1}"/><stop offset="1" stop-color="${m.c2}"/></radialGradient>
+   <linearGradient id="${g}r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff4c8"/><stop offset=".45" stop-color="#d9ab45"/><stop offset="1" stop-color="#7c5810"/></linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#${g}r)"/>
+  <circle cx="50" cy="50" r="42" fill="url(#${g}a)"/>
+  <circle cx="50" cy="50" r="39" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1" stroke-dasharray="1.5 3"/>
+  ${ART[m.id]()}
+  <ellipse cx="38" cy="22" rx="17" ry="6" fill="rgba(255,255,255,.2)" transform="rotate(-24 38 22)"/>
+  </svg>`;
+}
+const medalById=id=>MEDALS.find(m=>m.id===id);
+
+/* ================= ЗВУК ================= */
+let AC=null;
+function ensureAudio(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();}catch(e){}}
+function tone(freq,dur=0.18,vol=0.25,delay=0,type='sine'){
+  if(!AC) return; const t=AC.currentTime+delay, o=AC.createOscillator(), g=AC.createGain();
+  o.type=type;o.frequency.value=freq;const v=vol*SET.volume;
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(v,0.0002),t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g).connect(AC.destination);o.start(t);o.stop(t+dur+0.05);
+}
+function chime(){ensureAudio();[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,1.2,0.3,i*0.22));}
+const PHASE_FREQ={inhale:523.25,prep:523.25,hold:392,exhale:440,pause:329.6,rest:349.2};
+
+/* ================= ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ================= */
+const $=s=>document.querySelector(s);
+let currentTab='practice';
+function showTab(name){
+  currentTab=name;
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+  document.querySelectorAll('section.view').forEach(v=>v.classList.toggle('active',v.id==='v-'+name));
+  render(); window.scrollTo(0,0);
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+function render(){
+  applyEvaluation(today());
+  ({practice:renderPractice,progress:renderProgress,medals:renderMedals,theory:renderTheory,settings:renderSettings})[currentTab]();
+}
+
+/* ================= ЭКРАН: ПРАКТИКА ================= */
+function cycleDuration(ti,lv,isLast){return buildCycle(ti,lv,isLast).reduce((a,p)=>a+p.d,0);}
+function sessionSummary(){
+  if(SET.mode==='time') return `${SET.minutes} ${plural(SET.minutes,'минута','минуты','минут')} (таймер)`;
+  let total=0;for(let i=1;i<=SET.cycles;i++) total+=cycleDuration(S.tech,S.level,i===SET.cycles);
+  const m=Math.floor(total/60), s=Math.round(total%60);
+  return `${SET.cycles} ${plural(SET.cycles,'цикл','цикла','циклов')} · ≈ ${m?m+' мин ':''}${s} с`;
+}
+function statusLine(){
+  const t=today(), n=S.levelDays.length;
+  if(S.finished) return {cls:'ok',text:'Все уровни программы пройдены. Продолжайте практику — скоро добавим новые техники.'};
+  if(!n) return {cls:'',text:'Первая практика запустит отсчёт: нужно 7 дней практики, пропускать можно не больше 1 дня подряд.'};
+  const last=S.levelDays[n-1];
+  if(last===t) return {cls:'ok',text:`Сегодня засчитано ✓ Следующая практика — завтра (в крайнем случае послезавтра).`};
+  const skipped=diff(last,t)-1;
+  if(skipped===1) return {cls:'warn',text:'Вчера был пропуск. Сегодня практика обязательна — иначе счётчик дней обнулится.'};
+  return {cls:'',text:`Сегодня будет день ${n+1} из 7.`};
+}
+function renderPractice(){
+  const T=TECH[S.tech], L=T.levels[S.level], t=today(), n=S.levelDays.length;
+  const st=statusLine();
+  let dots='';for(let i=0;i<7;i++){const on=i<n;const isT=on&&S.levelDays[i]===t;dots+=`<div class="dot ${on?'on':''} ${isT?'today':''}"></div>`;}
+  const earned=MEDALS.filter(m=>S.medals[m.id]).sort((a,b)=>S.medals[b.id].first.localeCompare(S.medals[a.id].first));
+  $('#v-practice').innerHTML=`
+   ${S.notice?`<div class="banner warn"><div>${S.notice.text}</div><button class="x" id="dismiss" aria-label="Закрыть">×</button></div>`:''}
+   <div class="card">
+     <div class="row between"><span class="pill">${T.name}</span><span class="muted small">Техника ${S.tech+1} из ${TECH.length}</span></div>
+     <h2 style="margin-top:12px">Уровень ${S.level+1} из ${LEVELS_PER_TECH}</h2>
+     <div class="rhythm">${T.fmt(L)}</div>
+     <div class="muted small">${T.legend}</div>
+     ${S.finished?'':`<div class="dots">${dots}</div>
+     <div class="row between small"><span><b>${n}</b> из 7 дней${S.levelStart?` · начат ${fmtDate(S.levelStart)}`:''}</span></div>`}
+     <p class="small" style="color:${st.cls==='warn'?'var(--warn)':st.cls==='ok'?'var(--ok)':'var(--muted)'}">${st.text}</p>
+     <button class="btn primary big" id="start">Начать практику</button>
+     <div class="row between small" style="margin-top:10px"><span class="muted">${sessionSummary()}</span><a href="#" id="toSettings">изменить</a></div>
+   </div>
+   <div class="card">
+     <h3>Как выполнять</h3>
+     <ol class="steps small">${T.how.map(s=>`<li>${s}</li>`).join('')}</ol>
+     <a href="#" id="toTheory" class="small">Подробнее в разделе «Теория» →</a>
+   </div>
+   <div class="card">
+     <div class="row between"><h3 style="margin:0">Медали</h3><a href="#" id="toMedals" class="small">${earned.length} из ${MEDALS.length} →</a></div>
+     ${earned.length?`<div class="recent" style="margin-top:10px">${earned.slice(0,8).map(medalSVG).join('')}</div>`:`<p class="muted small">Завершите первую сессию — и получите первую медаль.</p>`}
+   </div>`;
+  $('#start').onclick=startSession;
+  $('#toSettings').onclick=e=>{e.preventDefault();showTab('settings');};
+  $('#toTheory').onclick=e=>{e.preventDefault();showTab('theory');};
+  $('#toMedals').onclick=e=>{e.preventDefault();showTab('medals');};
+  const d=$('#dismiss'); if(d) d.onclick=()=>{S.notice=null;saveS();render();};
+}
+
+/* ================= ЭКРАН: ПРОГРЕСС ================= */
+function renderProgress(){
+  const map=TECH.map((T,ti)=>{
+    const lv=T.levels.map((L,li)=>{
+      const done = ti<S.tech || (ti===S.tech && (li<S.level || S.finished));
+      const cur = !S.finished && ti===S.tech && li===S.level;
+      return `<div class="lv ${done?'done':''} ${cur?'cur':''}"><b>${done?'✓':li+1}</b>${T.fmt(L).replace(/ × 1 в .*/,'')}</div>`;
+    }).join('');
+    const state = ti<S.tech||(S.finished&&ti===S.tech)?'<span class="pill ok">освоено</span>':ti===S.tech?'<span class="pill">сейчас</span>':'<span class="pill" style="opacity:.6">впереди</span>';
+    return `<div class="tech"><div class="row between"><b>${ti+1}. ${T.name}</b>${state}</div><div class="levels">${lv}</div></div>`;
+  }).join('');
+  const hist=S.history.slice(0,12).map(h=>`<li><span>${fmtDate(h.date)} · ${TECH[h.tech].name}, ур. ${h.level+1}</span><span class="muted">${Math.floor(h.dur/60)}:${String(h.dur%60).padStart(2,'0')}</span></li>`).join('');
+  $('#v-progress').innerHTML=`
+   <div class="card"><h2>Программа</h2>
+     <p class="muted small">Каждый уровень — 7 дней практики. Пропускать можно не больше одного дня подряд; иначе счётчик дней обнуляется, а уровень сохраняется.</p>
+     ${map}</div>
+   <div class="card"><h2>Статистика</h2>
+     <div class="stats">
+       <div class="stat"><b>${S.sessions}</b><span class="muted small">сессий</span></div>
+       <div class="stat"><b>${S.allDays.length}</b><span class="muted small">дней практики</span></div>
+       <div class="stat"><b>${currentStreak()}</b><span class="muted small">дней подряд сейчас</span></div>
+       <div class="stat"><b>${bestStreak()}</b><span class="muted small">лучшая серия</span></div>
+     </div></div>
+   <div class="card"><h2>Последние сессии</h2>${hist?`<ul class="hist">${hist}</ul>`:'<p class="muted small">Пока пусто.</p>'}</div>`;
+}
+
+/* ================= ЭКРАН: МЕДАЛИ ================= */
+function renderMedals(){
+  const n=MEDALS.filter(m=>S.medals[m.id]).length;
+  $('#v-medals').innerHTML=`<div class="card"><div class="row between"><h2 style="margin:0">Медали</h2><span class="pill">${n} из ${MEDALS.length}</span></div>
+   <p class="muted small">Нажмите на медаль, чтобы узнать условие.</p>
+   <div class="medals">${MEDALS.map(m=>{const e=S.medals[m.id];return `<button class="medal ${e?'':'locked'}" data-id="${m.id}">${medalSVG(m)}${e&&m.id==='star'&&e.count>1?`<span class="cnt">×${e.count}</span>`:''}<div class="nm">${m.name}</div></button>`;}).join('')}</div></div>`;
+  document.querySelectorAll('.medal').forEach(b=>b.onclick=()=>{
+    const m=medalById(b.dataset.id), e=S.medals[m.id];
+    openModal(`<div style="${e?'':'filter:grayscale(1);opacity:.4'}">${medalSVG(m)}</div><h2>${m.name}</h2><p>${m.cond}</p>
+     <p class="muted small">${e?`Получена ${fmtDate(e.first)}${m.id==='star'?` · всего: ${e.count}`:''}`:'Ещё не получена'}</p>
+     <button class="btn primary" data-close>Понятно</button>`);
+  });
+}
+
+/* ================= ЭКРАН: ТЕОРИЯ ================= */
+function renderTheory(){
+  if($('#v-theory').dataset.ready) return;
+  $('#v-theory').dataset.ready='1';
+  $('#v-theory').innerHTML=`
+  <div class="card"><h2>Теория</h2><p class="muted small">Что такое прана, зачем работать с дыханием и как выполнять каждую технику программы.</p></div>
+
+  <details open><summary>Что такое прана</summary><div class="body">
+   <p><b>Прана</b> (санскр. «жизненная сила», от <i>пра</i> — «вперёд, наполнение» и <i>ан</i> — «дышать, жить») — в йоге так называют энергию, которая поддерживает жизнь. Она присутствует в воздухе, пище, солнечном свете, а главным её проводником считается дыхание.</p>
+   <p><b>Пранаяма</b> = <i>прана</i> + <i>аяма</i> («расширение, управление»). Это практика сознательного управления дыханием: его ритмом, глубиной, задержками и тем, через какую ноздрю идёт воздух. В «Йога-сутрах» Патанджали пранаяма — четвёртая ступень восьмеричного пути, мост между телом (асаны) и умом (концентрация, медитация).</p>
+   <p>По йогической традиции прана движется по тонким каналам — <b>нади</b>. Главные из них:</p>
+   <ul>
+     <li><b>Ида</b> — левый, «лунный» канал: охлаждение, покой, восстановление.</li>
+     <li><b>Пингала</b> — правый, «солнечный»: активность, тепло, энергия.</li>
+     <li><b>Сушумна</b> — центральный: равновесие, состояние ясного сосредоточения.</li>
+   </ul>
+   <p>Йога также выделяет пять потоков праны (вайю): <i>прана</i> (вдох, грудь), <i>апана</i> (выведение, низ живота), <i>самана</i> (усвоение, пупок), <i>удана</i> (речь, горло) и <i>вьяна</i> (распределение по всему телу).</p>
+  </div></details>
+
+  <details><summary>Зачем нужна дыхательная практика</summary><div class="body">
+   <p>Дыхание — единственная автоматическая функция тела, которой можно управлять сознательно. Через него можно влиять на нервную систему, которая иначе нам не подчиняется.</p>
+   <ul>
+     <li><b>Медленное дыхание и удлинённый выдох</b> активируют парасимпатическую нервную систему (через блуждающий нерв): замедляется пульс, снижается тревожность, приходит расслабление.</li>
+     <li><b>Ровный ритм</b> повышает вариабельность сердечного ритма — один из показателей устойчивости к стрессу.</li>
+     <li><b>Задержки дыхания</b> мягко повышают переносимость углекислого газа; дыхание в обычной жизни становится спокойнее и экономнее.</li>
+     <li><b>Счёт и наблюдение</b> за дыханием тренируют внимание — это подготовка к медитации.</li>
+     <li><b>Регулярность</b> важнее интенсивности: 3–10 минут каждый день дают больше, чем час раз в неделю. Поэтому программа построена на 7-дневных уровнях.</li>
+   </ul>
+   <p class="muted small">Практика не заменяет лечение. При хронических заболеваниях посоветуйтесь с врачом.</p>
+  </div></details>
+
+  <details><summary>Как устроена программа</summary><div class="body">
+   <ol>
+     <li>Три техники по порядку: <b>квадратное дыхание → анулома-вилома → капалабхати</b>. В каждой 5 уровней.</li>
+     <li>Чтобы перейти на следующий уровень, нужно <b>7 дней практики</b>. День засчитан, если завершена хотя бы одна полная сессия.</li>
+     <li>Пропускать можно <b>не больше 1 дня подряд</b> (7 дней укладываются максимум в 14). Если пропущено 2 дня — счётчик дней обнуляется, но уровень сохраняется.</li>
+     <li>Сложность растёт постепенно: сначала удлиняются задержки, потом вдохи и выдохи, затем начинается новая техника.</li>
+     <li>За достижения выдаются медали — смотрите раздел «Медали».</li>
+   </ol>
+  </div></details>
+
+  <details><summary>Общие правила и безопасность</summary><div class="body">
+   <ul>
+     <li>Практикуйте натощак или через 2–3 часа после еды, в проветренном помещении.</li>
+     <li>Сидите с прямой спиной: на стуле, на подушке со скрещенными ногами или на пятках. Плечи и лицо расслаблены.</li>
+     <li>Дышите носом, если в технике не сказано иное.</li>
+     <li><b>Никакого напряжения.</b> Если задержка даётся тяжело, хочется «хватать» воздух, кружится голова или темнеет в глазах — остановитесь и подышите свободно. Лучше остаться на уровне подольше.</li>
+     <li>Задержки дыхания и капалабхати <b>не выполняют</b> при беременности, высоком давлении, болезнях сердца, после недавних операций, при эпилепсии, глаукоме, отслоении сетчатки, острых состояниях. В этих случаях — только спокойное дыхание без задержек и консультация врача.</li>
+     <li>Не практикуйте за рулём, в воде и в любых ситуациях, где важна полная концентрация на другом.</li>
+   </ul>
+  </div></details>
+
+  <details><summary>1. Квадратное дыхание <span class="tag">сама вритти · box breathing</span></summary><div class="body">
+   <p><b>Суть:</b> четыре равные фазы — вдох, задержка, выдох, пауза — как четыре стороны квадрата. В йоге похожий принцип называется <i>сама вритти</i> («равное движение»). Эту технику используют спортсмены, пилоты и спецподразделения для быстрого восстановления самообладания.</p>
+   <h3>Как выполнять</h3>
+   <ol>
+     <li>Сядьте ровно, выдохните до конца.</li>
+     <li>Вдох носом на счёт 4 — сначала наполняется живот, потом рёбра и грудь.</li>
+     <li>Задержка на 4. Горло не зажимайте: воздух удерживается мягко, как будто вы просто «зависли» на вершине вдоха.</li>
+     <li>Плавный выдох носом на 4.</li>
+     <li>Пауза на 4 — спокойная, без усилия.</li>
+   </ol>
+   <h3>Польза</h3>
+   <ul><li>Быстро снимает стресс и тревогу, выравнивает пульс.</li><li>Учит ровному ритму и счёту — основа всех следующих пранаям.</li><li>Мягко тренирует задержки.</li></ul>
+   <h3>Уровни</h3>
+   <p>4-4-4-4 → 4-5-4-5 → 4-6-4-6 → 5-6-5-6 → 6-6-6-6. Сначала растут задержки, потом вдох и выдох.</p>
+   <h3>Частые ошибки</h3>
+   <ul><li>Поднимаются плечи на вдохе.</li><li>Зажато горло во время задержки.</li><li>Выдох «сбрасывается» в первую секунду, а не растягивается на весь счёт.</li></ul>
+  </div></details>
+
+  <details><summary>2. Анулома-вилома <span class="tag">попеременное дыхание ноздрями</span></summary><div class="body">
+   <p><b>Суть:</b> <i>анулома</i> — «по направлению», <i>вилома</i> — «против направления». Дыхание поочерёдно через левую и правую ноздрю. По традиции очищает и уравновешивает каналы ида и пингала. Близкая техника — нади шодхана («очищение каналов»); названия часто используют как синонимы.</p>
+   <h3>Вишну-мудра (положение руки)</h3>
+   <p>Правая рука: указательный и средний пальцы согнуты к ладони. Большой палец закрывает правую ноздрю, безымянный (с мизинцем) — левую. Левая рука спокойно лежит на колене.</p>
+   <h3>Один цикл</h3>
+   <ol>
+     <li>Закройте правую ноздрю — <b>вдох левой</b>.</li>
+     <li>Закройте обе — <b>задержка</b> (с 3-го уровня).</li>
+     <li>Откройте правую — <b>выдох правой</b>.</li>
+     <li><b>Вдох правой</b>.</li>
+     <li>Закройте обе — <b>задержка</b>.</li>
+     <li>Откройте левую — <b>выдох левой</b>.</li>
+   </ol>
+   <h3>Уровни (вдох – задержка – выдох)</h3>
+   <p>4-0-4 (ровное дыхание, 1:1) → 4-0-8 (выдох вдвое длиннее, 1:2) → 4-4-8 (1:1:2) → 4-8-8 (1:2:2) → 5-10-10.</p>
+   <h3>Польза</h3>
+   <ul><li>Глубокое успокоение, баланс активности и отдыха.</li><li>Улучшает концентрацию, хорошо подходит перед медитацией и сном.</li><li>Удлинённый выдох особенно сильно включает расслабление.</li></ul>
+   <h3>Важно</h3>
+   <ul><li>Если нос заложен, сначала прочистите его; через силу не дышите.</li><li>Дыхание бесшумное и плавное, давление пальцами лёгкое.</li><li>Задержки — только без напряжения (см. «Безопасность»).</li></ul>
+  </div></details>
+
+  <details><summary>3. Капалабхати <span class="tag">«сияющий череп»</span></summary><div class="body">
+   <p><b>Суть:</b> <i>капала</i> — «череп», <i>бхати</i> — «сияние». Формально это не пранаяма, а одна из шести очищающих практик (шаткарм). Короткие резкие выдохи за счёт мышц живота и пассивные вдохи. Бодрит, согревает, «проветривает» голову.</p>
+   <h3>Как выполнять</h3>
+   <ol>
+     <li>Сядьте ровно, ладони на коленях. Сделайте глубокий вдох.</li>
+     <li>Резкий короткий выдох носом: живот толчком уходит внутрь.</li>
+     <li>Отпустите живот — вдох происходит сам, без усилия.</li>
+     <li>Повторяйте в заданном темпе. Двигается только живот: плечи, грудь и лицо неподвижны.</li>
+     <li>После раунда — полный выдох, затем 30 секунд спокойного дыхания и наблюдения за ощущениями.</li>
+   </ol>
+   <h3>Уровни (выдохов за раунд · темп)</h3>
+   <p>20 × 1 в 2 с → 30 × 1 в 2 с → 40 × 1 в 1,5 с → 50 × 1 в 1 с → 60 × 1 в 1 с. Один цикл = один раунд.</p>
+   <h3>Польза</h3>
+   <ul><li>Бодрость и ясность, хорошо утром.</li><li>Тонус мышц пресса и диафрагмы.</li><li>Традиционно — очищение носовых ходов и дыхательных путей.</li></ul>
+   <h3>Противопоказания</h3>
+   <p>Беременность и менструация, гипертония, болезни сердца, грыжи (в том числе диафрагмальная), операции на животе и грудной клетке в последние месяцы, эпилепсия, глаукома, язва, острые воспаления. Не делайте перед сном и на полный желудок. При головокружении — остановитесь.</p>
+  </div></details>
+
+  <details><summary>Карта пранаям — что будет дальше</summary><div class="body">
+   <ul>
+     <li><b>Уджайи</b> — «победное» дыхание с лёгким сужением горла и мягким шумом; успокаивает, согревает, часто используется в асанах.</li>
+     <li><b>Бхастрика</b> — «кузнечные мехи»: активные и вдох, и выдох; сильно энергизирует.</li>
+     <li><b>Бхрамари</b> — «пчела»: выдох с гудением; снимает напряжение, помогает при бессоннице.</li>
+     <li><b>Шитали / шиткари</b> — охлаждающие: вдох через свёрнутый язык или сквозь зубы.</li>
+     <li><b>Сурья бхедана / чандра бхедана</b> — вдох только правой (активирует) или только левой (успокаивает) ноздрёй.</li>
+     <li><b>Нади шодхана с кумбхакой</b> — попеременное дыхание с длинными задержками в пропорции 1:4:2.</li>
+     <li><b>Когерентное дыхание</b> — около 6 вдохов-выдохов в минуту (5–5,5 с на фазу); выравнивает сердечный ритм.</li>
+     <li><b>Дыхание 4-7-8</b> — вдох 4, задержка 7, выдох 8; для засыпания.</li>
+   </ul>
+  </div></details>`;
+}
+
+/* ================= ЭКРАН: НАСТРОЙКИ ================= */
+function renderSettings(){
+  const perm = ('Notification' in window) ? Notification.permission : 'unsupported';
+  $('#v-settings').innerHTML=`
+   <div class="card"><h2>Сессия</h2>
+     <div class="field"><span>Режим</span><div class="seg"><button data-mode="cycles" class="${SET.mode==='cycles'?'on':''}">По циклам</button><button data-mode="time" class="${SET.mode==='time'?'on':''}">По времени</button></div></div>
+     ${SET.mode==='cycles'
+       ?`<div class="field"><span>Количество циклов<br><span class="muted small">рекомендуется 3</span></span><input type="number" id="cycles" min="1" max="100" value="${SET.cycles}"></div>`
+       :`<div class="field"><span>Длительность, минут<br><span class="muted small">рекомендуется 3; таймер с обратным отсчётом</span></span><input type="number" id="minutes" min="1" max="60" value="${SET.minutes}"></div>`}
+     <div class="field"><span>Звук смены фаз</span><label class="switch"><input type="checkbox" id="phaseSound" ${SET.phaseSound?'checked':''}><span></span></label></div>
+     <div class="field"><span>Громкость</span><input type="range" id="volume" min="0" max="1" step="0.05" value="${SET.volume}"></div>
+     <div class="field"><span>Сигнал окончания</span><button class="btn ghost" id="testChime">Проверить</button></div>
+   </div>
+   <div class="card"><h2>Напоминания</h2>
+     <p class="muted small">Работают, пока страница открыта в браузере (можно оставить её во вкладке). Полноценные напоминания появятся в мобильном приложении.</p>
+     <div class="field"><span>Включить напоминания</span><label class="switch"><input type="checkbox" id="remOn" ${SET.remindersOn?'checked':''}><span></span></label></div>
+     <div class="times" id="times">${SET.reminders.map((t,i)=>`<div class="row"><input type="time" data-i="${i}" value="${t}"><button class="btn ghost" data-del="${i}" aria-label="Удалить">✕</button></div>`).join('')}</div>
+     <div class="row" style="margin-top:10px"><button class="btn ghost" id="addTime">+ Добавить время</button><button class="btn ghost" id="testRem">Проверить</button></div>
+     <p class="small muted" style="margin-top:10px">Уведомления браузера: ${perm==='granted'?'разрешены ✓':perm==='denied'?'запрещены — разрешите их в настройках сайта':perm==='unsupported'?'не поддерживаются, будет показано сообщение на странице':'не запрошены'}</p>
+   </div>
+   <div class="card"><h2>Оформление</h2>
+     <div class="field"><span>Тема</span><div class="seg"><button data-theme="auto" class="${SET.theme==='auto'?'on':''}">Авто</button><button data-theme="light" class="${SET.theme==='light'?'on':''}">Светлая</button><button data-theme="dark" class="${SET.theme==='dark'?'on':''}">Тёмная</button></div></div>
+   </div>
+   <div class="card"><h2>Данные</h2>
+     <p class="muted small">Прогресс хранится только в этом браузере на этом устройстве.</p>
+     <button class="btn danger" id="resetAll">Сбросить весь прогресс</button>
+   </div>`;
+  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{SET.mode=b.dataset.mode;saveSet();renderSettings();});
+  document.querySelectorAll('[data-theme]').forEach(b=>b.onclick=()=>{SET.theme=b.dataset.theme;saveSet();applyTheme();renderSettings();});
+  const num=(id,key,min,max)=>{const el=$(id);if(el)el.onchange=()=>{let v=Math.round(+el.value)||min;v=Math.min(max,Math.max(min,v));el.value=v;SET[key]=v;saveSet();};};
+  num('#cycles','cycles',1,100); num('#minutes','minutes',1,60);
+  $('#phaseSound').onchange=e=>{SET.phaseSound=e.target.checked;saveSet();};
+  $('#volume').oninput=e=>{SET.volume=+e.target.value;saveSet();};
+  $('#testChime').onclick=chime;
+  $('#remOn').onchange=async e=>{SET.remindersOn=e.target.checked;saveSet();if(SET.remindersOn&&'Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission();}catch(_){}}renderSettings();};
+  document.querySelectorAll('#times input').forEach(inp=>inp.onchange=()=>{SET.reminders[+inp.dataset.i]=inp.value;saveSet();});
+  document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{SET.reminders.splice(+b.dataset.del,1);saveSet();renderSettings();});
+  $('#addTime').onclick=()=>{SET.reminders.push('12:00');saveSet();renderSettings();};
+  $('#testRem').onclick=async()=>{ensureAudio();if('Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission();}catch(_){}}fireReminder(true);renderSettings();};
+  $('#resetAll').onclick=()=>openModal(`<h2>Сбросить прогресс?</h2><p>Уровни, дни, история и медали будут удалены. Настройки сохранятся.</p>
+     <div class="row" style="justify-content:center"><button class="btn" data-close>Отмена</button><button class="btn danger" id="confirmReset">Сбросить</button></div>`,
+     ()=>{$('#confirmReset').onclick=()=>{S=structuredClone(DEF_STATE);saveS();closeModal();toast('Прогресс сброшен');showTab('practice');};});
+}
+function applyTheme(){ if(SET.theme==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',SET.theme); }
+
+/* ================= НАПОМИНАНИЯ ================= */
+function fireReminder(test){
+  const done=S.levelDays.includes(today());
+  const body = done ? 'Сегодня уже засчитано. Можно подышать ещё пару минут для удовольствия.' :
+    `${TECH[S.tech].name}, уровень ${S.level+1}. ${statusLine().cls==='warn'?'Сегодня обязательно — иначе счётчик обнулится!':'Пара минут — и день засчитан.'}`;
+  let shown=false;
+  if('Notification' in window && Notification.permission==='granted'){ try{ new Notification(test?'Проверка напоминания':'Время дышать 🌬️',{body, tag:'bw1'}); shown=true;}catch(e){} }
+  if(!shown) openModal(`<h2>${test?'Проверка напоминания':'Время дышать 🌬️'}</h2><p>${body}</p><button class="btn primary" data-close>Хорошо</button>`);
+  chime();
+}
+function checkReminders(){
+  if(!SET.remindersOn) return;
+  const d=nowDate(), hm=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'), t=today();
+  let fired={}; try{fired=JSON.parse(localStorage.getItem(LS_REM))||{};}catch(e){}
+  SET.reminders.forEach(r=>{ if(r===hm && fired[r]!==t){ fired[r]=t; fireReminder(false);} });
+  try{localStorage.setItem(LS_REM,JSON.stringify(fired));}catch(e){}
+}
+setInterval(checkReminders,15000);
+
+/* ================= СЕССИЯ ================= */
+const ph=(k,d,label,nos)=>({k,d,label,nos});
+function buildCycle(ti,lv,isLast){
+  const L=TECH[ti].levels[lv];
+  if(ti===0){const [a,b,c,d]=L;return [ph('inhale',a,'Вдох'),ph('hold',b,'Задержка'),ph('exhale',c,'Выдох'),ph('pause',d,'Пауза')].filter(p=>p.d>0);}
+  if(ti===1){const [a,b,c]=L;return [ph('inhale',a,'Вдох левой','L'),ph('hold',b,'Задержка','-'),ph('exhale',c,'Выдох правой','R'),
+    ph('inhale',a,'Вдох правой','R'),ph('hold',b,'Задержка','-'),ph('exhale',c,'Выдох левой','L')].filter(p=>p.d>0);}
+  const [n,iv]=L, arr=[ph('prep',4,'Глубокий вдох')];
+  for(let i=1;i<=n;i++) arr.push(Object.assign(ph('pump',iv,'Резкий выдох'),{n:i,of:n}));
+  arr.push(ph('exhale',3,'Полный выдох'));
+  if(!isLast) arr.push(ph('rest',30,'Отдых — спокойное дыхание'));
+  return arr;
+}
+const ORB={ready:'--pause',inhale:'--inhale',prep:'--inhale',hold:'--hold',exhale:'--exhale',pause:'--pause',pump:'--pump',rest:'--rest'};
+let R=null, wakeLock=null;
+async function lockScreen(){try{if('wakeLock' in navigator) wakeLock=await navigator.wakeLock.request('screen');}catch(e){}}
+function unlockScreen(){try{wakeLock&&wakeLock.release();}catch(e){}wakeLock=null;}
+document.addEventListener('visibilitychange',()=>{if(R&&!R.paused&&document.visibilityState==='visible')lockScreen();});
+
+function startSession(){
+  ensureAudio(); lockScreen();
+  const ti=S.tech, lv=S.level, start=nowDate();
+  R={ti,lv,mode:SET.mode,cycles:SET.cycles,limit:SET.minutes*60,cycle:0,queue:[ph('ready',3,'Приготовьтесь')],cur:null,
+     phaseEl:0,practice:0,paused:false,last:performance.now(),startHour:start.getHours(),prevScale:0.55,lastSec:-1};
+  if(R.mode==='cycles'){R.total=0;for(let i=1;i<=R.cycles;i++)R.total+=cycleDuration(ti,lv,i===R.cycles);}
+  $('#sTech').textContent=`${TECH[ti].name} · ур. ${lv+1}`;
+  $('#nostrils').hidden = ti!==1;
+  $('#btnPause').textContent='Пауза';
+  $('#session').classList.add('on');
+  nextPhase(); requestAnimationFrame(frame);
+}
+function nextPhase(){
+  if(!R.queue.length){
+    if(R.mode==='cycles'){ if(R.cycle>=R.cycles){finishSession(true);return false;} R.cycle++; R.queue=buildCycle(R.ti,R.lv,R.cycle===R.cycles); }
+    else { R.cycle++; R.queue=buildCycle(R.ti,R.lv,false); }
+  }
+  if(R.cur) R.prevScale=scaleFor(R.cur,1);
+  R.cur=R.queue.shift(); R.lastSec=-1;
+  const k=R.cur.k;
+  if(SET.phaseSound){ if(k==='pump') tone(180,0.06,0.18,0,'triangle'); else if(PHASE_FREQ[k]) tone(PHASE_FREQ[k],0.25,0.22); }
+  document.getElementById('session').style.setProperty('--orb',`var(${ORB[k]})`);
+  $('#phaseLabel').textContent=R.cur.label;
+  let sub='';
+  if(k==='pump') sub=`${R.cur.n} / ${R.cur.of}`;
+  else if(k==='ready') sub='Сядьте ровно, расслабьте плечи';
+  else if(k==='hold'&&R.ti===1) sub='обе ноздри закрыты';
+  else if(k==='rest') sub='Наблюдайте за ощущениями';
+  $('#phaseSub').textContent=sub;
+  if(R.ti===1){
+    const L=$('#nosL'),Rn=$('#nosR'); L.className='nos';Rn.className='nos';
+    const ex=k==='exhale'?' ex':'';
+    if(R.cur.nos==='L'){L.className='nos on'+ex;Rn.className='nos off';}
+    else if(R.cur.nos==='R'){Rn.className='nos on'+ex;L.className='nos off';}
+    else if(R.cur.nos==='-'){L.className='nos off';Rn.className='nos off';}
+  }
+  return true;
+}
+const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+const MIN=0.55, MAX=1;
+function scaleFor(c,p){
+  switch(c.k){
+    case 'inhale': case 'prep': return R.prevScale+(MAX-R.prevScale)*ease(p);
+    case 'exhale': return R.prevScale-(R.prevScale-MIN)*ease(p);
+    case 'hold': return R.prevScale;
+    case 'pause': return R.prevScale;
+    case 'pump': return p<.25 ? 0.86-0.16*(p/.25) : 0.70+0.16*((p-.25)/.75);
+    case 'rest': return 0.72+0.06*Math.sin(p*c.d/6*Math.PI*2);
+    default: return MIN;
+  }
+}
+function fmtClock(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function frame(ts){
+  if(!R) return;
+  const dt=Math.min(5,(ts-R.last)/1000)*BW.speed; R.last=ts;
+  if(!R.paused){
+    R.phaseEl+=dt; if(R.cur.k!=='ready') R.practice+=dt;
+    if(R.mode==='time' && R.practice>=R.limit){R.practice=R.limit;finishSession(true);return;}
+    while(R.phaseEl>=R.cur.d){R.phaseEl-=R.cur.d; if(!nextPhase()) return;}
+  }
+  const p=Math.min(1,R.phaseEl/R.cur.d);
+  $('#orb').style.transform=`scale(${scaleFor(R.cur,p).toFixed(4)})`;
+  $('#ringArc').setAttribute('stroke-dashoffset',(295.3*(1-p)).toFixed(1));
+  const left=R.cur.k==='pump'?'':Math.ceil(R.cur.d-R.phaseEl);
+  $('#orbNum').textContent=left;
+  if(R.mode==='time') $('#sProgress').textContent=`Осталось ${fmtClock(R.limit-R.practice)}`;
+  else $('#sProgress').textContent=R.cur.k==='ready'?`${R.cycles} ${plural(R.cycles,'цикл','цикла','циклов')}`:`Цикл ${R.cycle} из ${R.cycles} · ${fmtClock(R.total-R.practice)}`;
+  requestAnimationFrame(frame);
+}
+$('#btnPause').onclick=()=>{ if(!R) return; R.paused=!R.paused; $('#btnPause').textContent=R.paused?'Продолжить':'Пауза'; $('#phaseSub').textContent=R.paused?'Пауза':''; if(R.paused)unlockScreen();else lockScreen(); };
+$('#btnStop').onclick=()=>{
+  if(!R) return; const was=R.paused; R.paused=true;
+  openModal(`<h2>Прервать сессию?</h2><p>Незавершённая сессия не засчитывается.</p>
+   <div class="row" style="justify-content:center"><button class="btn" id="contS">Продолжить</button><button class="btn danger" id="quitS">Прервать</button></div>`,
+   ()=>{$('#contS').onclick=()=>{closeModal();if(R){R.paused=was;R.last=performance.now();}};$('#quitS').onclick=()=>{closeModal();finishSession(false);};});
+};
+function finishSession(completed){
+  const r=R; R=null; unlockScreen();
+  $('#session').classList.remove('on');
+  if(!completed){toast('Сессия прервана');render();return;}
+  chime();
+  const res=completeSession(r.practice, r.startHour);
+  let lv='';
+  if(res.levelUp){
+    if(res.levelUp.all) lv=`<p><b>🎉 Вся программа пройдена!</b> Вы освоили ${TECH[res.levelUp.fromTech].name}.</p>`;
+    else if(res.levelUp.newTech) lv=`<p><b>🎉 Техника освоена!</b> Дальше — ${TECH[S.tech].name}. Загляните в «Теорию» перед началом.</p>`;
+    else lv=`<p><b>🎉 Новый уровень: ${S.level+1}!</b> Ритм: ${TECH[S.tech].fmt(TECH[S.tech].levels[S.level])}</p>`;
+  }else if(res.dayCounted){ lv=`<p>День засчитан: <b>${S.levelDays.length} из 7</b>.</p>`; }
+  else if(!S.finished){ lv=`<p class="muted">Сегодняшний день уже был засчитан ранее. Отличная дополнительная практика!</p>`; }
+  const medals=res.fresh.length?`<h3 style="margin-top:14px">Новые медали</h3><div class="newmedals">${res.fresh.map(id=>{const m=medalById(id);return `<div>${medalSVG(m)}<div class="small"><b>${m.name}</b></div></div>`;}).join('')}</div>`:'';
+  openModal(`<h2>Сессия завершена ✓</h2><p class="muted">Длительность ${fmtClock(r.practice)}</p>${lv}${medals}<button class="btn primary" data-close>Отлично</button>`);
+  render();
+}
+
+/* ================= МОДАЛКА / ТОСТ ================= */
+function openModal(html,after){$('#modalBox').innerHTML=html;$('#modal').classList.add('on');$('#modalBox').querySelectorAll('[data-close]').forEach(b=>b.onclick=closeModal);if(after)after();}
+function closeModal(){$('#modal').classList.remove('on');}
+$('#modal').onclick=e=>{if(e.target.id==='modal'&&!R)closeModal();};
+let toastT;function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),2600);}
+
+/* ================= СТАРТ ================= */
+BW.state=()=>S; BW.complete=completeSession; BW.render=render; BW.reset=()=>{S=structuredClone(DEF_STATE);saveS();render();};
+applyTheme();
+render();
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!R)render();});
+})();
+</script>
+</body>
+</html>
