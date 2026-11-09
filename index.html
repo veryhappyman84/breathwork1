@@ -155,8 +155,19 @@ input[type=range]{width:140px}
 #modal .box svg.medal-svg{width:130px;height:130px}
 .newmedals{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:12px 0}
 .newmedals div{width:120px}
-.newmedals svg{width:96px;height:96px;animation:pop .6s ease-out both}
+.newmedals div{text-align:center}
 @keyframes pop{0%{transform:scale(.3) rotate(-20deg);opacity:0}70%{transform:scale(1.1)}100%{transform:none;opacity:1}}
+.coin3d{perspective:700px;display:inline-block;cursor:pointer;margin:4px auto}
+.coin3d .coin{position:relative;width:150px;height:150px;transform-style:preserve-3d}
+.coin3d.sm .coin{width:96px;height:96px}
+.coin3d .coin.spin{animation:coinSpin 1.8s cubic-bezier(.3,.7,.3,1) both}
+@keyframes coinSpin{0%{transform:scale(.45) rotateY(0)}30%{transform:scale(1.18) rotateY(90deg)}100%{transform:scale(1) rotateY(360deg)}}
+.coin3d .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.coin3d .face svg{width:100%;height:100%;display:block}
+.coin3d .edge{position:absolute;inset:2%;border-radius:50%;background:linear-gradient(90deg,#7c5810,#e8c25a 45%,#fff0b0 50%,#c9952f 60%,#6b4a0c)}
+.coin3d .back{transform:rotateY(180deg) translateZ(6px)}
+.coin3d .front{transform:translateZ(6px)}
+.coin3d .hint{font-size:.75rem;color:var(--muted);margin-top:4px}
 #toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.9rem;z-index:70;opacity:0;pointer-events:none;transition:opacity .3s;max-width:calc(100% - 32px)}
 #toast.on{opacity:1}
 </style>
@@ -260,7 +271,7 @@ const MASTERY = ['turtle','swan','dragon'];
 const LS_STATE='bw1.state', LS_SET='bw1.settings', LS_REM='bw1.remFired';
 const DEF_STATE = {v:1, tech:0, level:0, levelStart:null, levelDays:[], allDays:[], sessions:0,
   medals:{}, pendingPhoenix:false, history:[], notice:null, finished:false};
-const DEF_SET = {mode:'cycles', cycles:3, minutes:3, phaseSound:true, volume:0.6, remindersOn:false, reminders:['08:00','20:00'], theme:'auto'};
+const DEF_SET = {mode:'cycles', cycles:3, minutes:3, phaseSound:true, metro:'click', volume:0.6, remindersOn:false, reminders:['08:00','20:00'], theme:'auto'};
 function load(k,def){ try{ const v=JSON.parse(localStorage.getItem(k)); return v?Object.assign(structuredClone(def),v):structuredClone(def);}catch(e){return structuredClone(def);} }
 function save(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
 let S = load(LS_STATE, DEF_STATE);
@@ -446,6 +457,28 @@ function medalSVG(m){
   </svg>`;
 }
 const medalById=id=>MEDALS.find(m=>m.id===id);
+function medalBackSVG(m){
+  const g='mb'+(++uid), e=S.medals[m.id];
+  const words=m.name.split(' '), lines=[]; let cur='';
+  words.forEach(w=>{ if((cur+' '+w).trim().length>12 && cur){lines.push(cur);cur=w;} else cur=(cur+' '+w).trim(); }); if(cur)lines.push(cur);
+  const y0=50-(lines.length-1)*6-4;
+  const txt=lines.map((l,i)=>`<text x="50" y="${y0+i*12}" text-anchor="middle" font-size="10" font-weight="700" fill="#fff8e0" font-family="system-ui,sans-serif">${l}</text>`).join('');
+  const date=e?`<text x="50" y="${y0+lines.length*12+4}" text-anchor="middle" font-size="7.5" fill="rgba(255,248,224,.85)" font-family="system-ui,sans-serif">${fmtDate(e.first)}</text>`:'';
+  return `<svg viewBox="0 0 100 100"><defs>
+   <linearGradient id="${g}r" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4c8"/><stop offset=".45" stop-color="#d9ab45"/><stop offset="1" stop-color="#7c5810"/></linearGradient>
+   <radialGradient id="${g}a" cx="65%" cy="30%" r="80%"><stop offset="0" stop-color="${m.c2}"/><stop offset="1" stop-color="#1a1408"/></radialGradient></defs>
+   <circle cx="50" cy="50" r="48" fill="url(#${g}r)"/><circle cx="50" cy="50" r="42" fill="url(#${g}a)"/>
+   <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,240,180,.5)" stroke-width="1"/>
+   ${star(50,20,5,2.2,5,'#ffe08a')}${txt}${date}
+   <text x="50" y="86" text-anchor="middle" font-size="6" letter-spacing="1.5" fill="rgba(255,240,180,.7)" font-family="system-ui,sans-serif">ПРАНАЯМА</text></svg>`;
+}
+function coinHTML(m,small){
+  let edge='';for(let z=-5;z<=5;z++) edge+=`<div class="edge" style="transform:translateZ(${z}px)"></div>`;
+  return `<div class="coin3d ${small?'sm':''}"><div class="coin spin">${edge}<div class="face front">${medalSVG(m)}</div><div class="face back">${medalBackSVG(m)}</div></div></div>`;
+}
+function bindCoins(root){
+  root.querySelectorAll('.coin3d').forEach(c=>c.onclick=()=>{const k=c.querySelector('.coin');k.classList.remove('spin');void k.offsetWidth;k.classList.add('spin');});
+}
 
 /* ================= ЗВУК ================= */
 let AC=null;
@@ -455,6 +488,14 @@ function tone(freq,dur=0.18,vol=0.25,delay=0,type='sine'){
   o.type=type;o.frequency.value=freq;const v=vol*SET.volume;
   g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(v,0.0002),t+0.02);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
   o.connect(g).connect(AC.destination);o.start(t);o.stop(t+dur+0.05);
+}
+function say(text){try{if(!('speechSynthesis' in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ru-RU';u.rate=1.15;u.volume=Math.min(1,SET.volume+0.2);const v=speechSynthesis.getVoices().find(v=>/^ru/i.test(v.lang));if(v)u.voice=v;speechSynthesis.speak(u);}catch(e){}}
+const NUM=['','раз','два','три','четыре','пять','шесть','семь','восемь','девять','десять','одиннадцать','двенадцать'];
+function metroTick(n,cur){
+  if(SET.metro==='off') return;
+  if(SET.metro==='voice'){ say(n===1 ? cur.label : (NUM[n]||String(n))); return; }
+  if(n===1) return; // начало фазы уже отмечено звуком смены фазы
+  tone(n%2?1500:1300,0.035,0.32,0,'square');
 }
 function chime(){ensureAudio();[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,1.2,0.3,i*0.22));}
 const PHASE_FREQ={inhale:523.25,prep:523.25,hold:392,exhale:440,pause:329.6,rest:349.2};
@@ -560,9 +601,9 @@ function renderMedals(){
    <div class="medals">${MEDALS.map(m=>{const e=S.medals[m.id];return `<button class="medal ${e?'':'locked'}" data-id="${m.id}">${medalSVG(m)}${e&&m.id==='star'&&e.count>1?`<span class="cnt">×${e.count}</span>`:''}<div class="nm">${m.name}</div></button>`;}).join('')}</div></div>`;
   document.querySelectorAll('.medal').forEach(b=>b.onclick=()=>{
     const m=medalById(b.dataset.id), e=S.medals[m.id];
-    openModal(`<div style="${e?'':'filter:grayscale(1);opacity:.4'}">${medalSVG(m)}</div><h2>${m.name}</h2><p>${m.cond}</p>
+    openModal(`${e?coinHTML(m)+'<div class="muted small">нажмите на медаль, чтобы повернуть</div>':`<div style="filter:grayscale(1);opacity:.4">${medalSVG(m)}</div>`}<h2>${m.name}</h2><p>${m.cond}</p>
      <p class="muted small">${e?`Получена ${fmtDate(e.first)}${m.id==='star'?` · всего: ${e.count}`:''}`:'Ещё не получена'}</p>
-     <button class="btn primary" data-close>Понятно</button>`);
+     <button class="btn primary" data-close>Понятно</button>`,()=>bindCoins($('#modalBox')));
   });
 }
 
@@ -698,6 +739,7 @@ function renderSettings(){
      ${SET.mode==='cycles'
        ?`<div class="field"><span>Количество циклов<br><span class="muted small">рекомендуется 3</span></span><input type="number" id="cycles" min="1" max="100" value="${SET.cycles}"></div>`
        :`<div class="field"><span>Длительность, минут<br><span class="muted small">рекомендуется 3; таймер с обратным отсчётом</span></span><input type="number" id="minutes" min="1" max="60" value="${SET.minutes}"></div>`}
+     <div class="field"><span>Метроном счёта<br><span class="muted small">каждую секунду</span></span><div class="seg"><button data-metro="off" class="${SET.metro==='off'?'on':''}">Выкл</button><button data-metro="click" class="${SET.metro==='click'?'on':''}">Щелчки</button><button data-metro="voice" class="${SET.metro==='voice'?'on':''}">Голос</button></div></div>
      <div class="field"><span>Звук смены фаз</span><label class="switch"><input type="checkbox" id="phaseSound" ${SET.phaseSound?'checked':''}><span></span></label></div>
      <div class="field"><span>Громкость</span><input type="range" id="volume" min="0" max="1" step="0.05" value="${SET.volume}"></div>
      <div class="field"><span>Сигнал окончания</span><button class="btn ghost" id="testChime">Проверить</button></div>
@@ -717,6 +759,7 @@ function renderSettings(){
      <button class="btn danger" id="resetAll">Сбросить весь прогресс</button>
    </div>`;
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{SET.mode=b.dataset.mode;saveSet();renderSettings();});
+  document.querySelectorAll('[data-metro]').forEach(b=>b.onclick=()=>{SET.metro=b.dataset.metro;saveSet();renderSettings();if(SET.metro==='click'){ensureAudio();tone(1600,0.035,0.35,0,'square');}else if(SET.metro==='voice')say('раз, два, три');});
   document.querySelectorAll('[data-theme]').forEach(b=>b.onclick=()=>{SET.theme=b.dataset.theme;saveSet();applyTheme();renderSettings();});
   const num=(id,key,min,max)=>{const el=$(id);if(el)el.onchange=()=>{let v=Math.round(+el.value)||min;v=Math.min(max,Math.max(min,v));el.value=v;SET[key]=v;saveSet();};};
   num('#cycles','cycles',1,100); num('#minutes','minutes',1,60);
@@ -832,6 +875,14 @@ function frame(ts){
     if(R.mode==='time' && R.practice>=R.limit){R.practice=R.limit;finishSession(true);return;}
     while(R.phaseEl>=R.cur.d){R.phaseEl-=R.cur.d; if(!nextPhase()) return;}
   }
+  if(!R.paused && R.cur.k!=='pump'){
+    const sec=Math.floor(R.phaseEl);
+    if(sec!==R.lastSec){ R.lastSec=sec;
+      if(R.cur.k==='rest'){ if(sec===0 && SET.metro==='voice') say('Отдых'); }
+      else if(R.cur.k==='ready'){ if(SET.metro==='voice') say(['три','два','один'][sec]||''); else if(SET.metro==='click') tone(1300,0.035,0.3,0,'square'); }
+      else metroTick(sec+1,R.cur);
+    }
+  }
   const p=Math.min(1,R.phaseEl/R.cur.d);
   $('#orb').style.transform=`scale(${scaleFor(R.cur,p).toFixed(4)})`;
   $('#ringArc').setAttribute('stroke-dashoffset',(295.3*(1-p)).toFixed(1));
@@ -861,8 +912,8 @@ function finishSession(completed){
     else lv=`<p><b>🎉 Новый уровень: ${S.level+1}!</b> Ритм: ${TECH[S.tech].fmt(TECH[S.tech].levels[S.level])}</p>`;
   }else if(res.dayCounted){ lv=`<p>День засчитан: <b>${S.levelDays.length} из 7</b>.</p>`; }
   else if(!S.finished){ lv=`<p class="muted">Сегодняшний день уже был засчитан ранее. Отличная дополнительная практика!</p>`; }
-  const medals=res.fresh.length?`<h3 style="margin-top:14px">Новые медали</h3><div class="newmedals">${res.fresh.map(id=>{const m=medalById(id);return `<div>${medalSVG(m)}<div class="small"><b>${m.name}</b></div></div>`;}).join('')}</div>`:'';
-  openModal(`<h2>Сессия завершена ✓</h2><p class="muted">Длительность ${fmtClock(r.practice)}</p>${lv}${medals}<button class="btn primary" data-close>Отлично</button>`);
+  const medals=res.fresh.length?`<h3 style="margin-top:14px">Новые медали</h3><div class="newmedals">${res.fresh.map(id=>{const m=medalById(id);return `<div>${coinHTML(m,true)}<div class="small"><b>${m.name}</b></div></div>`;}).join('')}</div>`:'';
+  openModal(`<h2>Сессия завершена ✓</h2><p class="muted">Длительность ${fmtClock(r.practice)}</p>${lv}${medals}<button class="btn primary" data-close>Отлично</button>`,()=>bindCoins($('#modalBox')));
   render();
 }
 
