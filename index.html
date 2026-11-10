@@ -3,160 +3,226 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f1320">
-<title>Дыхание · Пранаяма</title>
+<meta name="theme-color" content="#0a0e13">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Дыхание">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Дыхание</title>
 <style>
 :root{
-  --bg:#f3f5fa; --surface:#ffffff; --surface2:#eef1f8; --text:#1c2232; --muted:#667087;
-  --line:#dde2ee; --accent:#3a74d6; --accent-ink:#ffffff; --accent-soft:#e3ecfb;
-  --ok:#23915f; --warn:#c9741c; --danger:#cf3f3f;
-  --inhale:#2fb3a6; --hold:#7c5cff; --exhale:#3a86e0; --pause:#7d8aa6; --pump:#f08a2c; --rest:#4fbf86;
-  --shadow:0 6px 24px rgba(20,30,60,.08);
-  --radius:18px;
+  --bg:#0a0e13; --surface:#131920; --surface2:#1b232d; --text:#f3f0e7; --muted:#8d98a5; --line:#243040;
+  --t1:#2fd3c0; --t2:#2b7fe0;
+  --accent:var(--t1); --accent-text:var(--t1); --accent-ink:#fff; --accent-soft:color-mix(in srgb,var(--t1) 16%,transparent);
+  --ok:#4cd08f; --warn:#ffb057; --danger:#ff6b6b;
+  --inhale:#2fd3c0; --hold:#9b7bff; --exhale:#3a8ef0; --pause:#6f7f95; --pump:#ff8a2c; --rest:#4fbf86;
+  --shadow:0 10px 30px rgba(0,0,0,.35); --radius:22px;
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0e1220; --surface:#161b2b; --surface2:#1e2437; --text:#e7eaf4; --muted:#98a1b8;
-    --line:#2a3149; --accent:#6aa0ff; --accent-ink:#0e1220; --accent-soft:#1f2c4a;
-    --ok:#4cc58c; --warn:#f0a050; --danger:#ff6b6b; --shadow:0 6px 24px rgba(0,0,0,.35);
-  }
+:root[data-theme="light"]{
+  --bg:#f5efe2; --surface:#fffdf8; --surface2:#ece4d3; --text:#17201b; --muted:#6b746d; --line:#e0d7c3;
+  --accent-text:color-mix(in srgb,var(--t1) 55%,#000);
+  --ok:#1f8f5c; --warn:#c26a12; --danger:#cf3f3f; --shadow:0 10px 30px rgba(70,55,20,.10);
 }
-:root[data-theme="dark"]{
-  --bg:#0e1220; --surface:#161b2b; --surface2:#1e2437; --text:#e7eaf4; --muted:#98a1b8;
-  --line:#2a3149; --accent:#6aa0ff; --accent-ink:#0e1220; --accent-soft:#1f2c4a;
-  --ok:#4cc58c; --warn:#f0a050; --danger:#ff6b6b; --shadow:0 6px 24px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0}
-body{background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:84px}
-h1,h2,h3{line-height:1.25;margin:0 0 .5em}
-h1{font-size:1.35rem}
-h2{font-size:1.15rem}
-h3{font-size:1rem}
+body{background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:calc(104px + env(safe-area-inset-bottom));overflow-x:hidden}
+body::before{content:"";position:fixed;inset:-20% -20% auto -20%;height:60vh;background:radial-gradient(ellipse at 30% 0%,color-mix(in srgb,var(--t1) 22%,transparent),transparent 60%),radial-gradient(ellipse at 90% 10%,color-mix(in srgb,var(--t2) 18%,transparent),transparent 55%);pointer-events:none;z-index:0;transition:background .6s}
+h1,h2,h3{line-height:1.2;margin:0 0 .5em;letter-spacing:-.02em}
+h1{font-size:1.9rem;font-weight:800}
+h2{font-size:1.25rem;font-weight:800}
+h3{font-size:1.02rem;font-weight:700}
 p{margin:.4em 0 .8em}
-a{color:var(--accent)}
-.wrap{max-width:720px;margin:0 auto;padding:16px}
-header.top{display:flex;align-items:center;gap:10px;padding:14px 16px 4px;max-width:720px;margin:0 auto}
-header.top .logo{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--inhale),var(--hold));flex:none}
-header.top h1{margin:0;font-size:1.15rem}
-header.top .sub{color:var(--muted);font-size:.85rem}
+a{color:var(--accent-text)}
+.wrap{max-width:560px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top)) 16px 16px;position:relative;z-index:1}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px;margin:0 0 14px;box-shadow:var(--shadow)}
-.muted{color:var(--muted)}
-.small{font-size:.875rem}
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.between{justify-content:space-between}
-.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:.8rem;font-weight:600}
+.muted{color:var(--muted)} .small{font-size:.875rem}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap} .between{justify-content:space-between}
+.sec{margin:22px 2px 10px;display:flex;justify-content:space-between;align-items:baseline}
+.sec a{font-size:.85rem;font-weight:600;text-decoration:none}
+.page-title{margin:6px 2px 16px}
+.pill{display:inline-block;padding:4px 11px;border-radius:999px;background:var(--accent-soft);color:var(--accent-text);font-size:.78rem;font-weight:700}
 .pill.ok{background:color-mix(in srgb,var(--ok) 18%,transparent);color:var(--ok)}
-.pill.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
-.btn{appearance:none;border:0;border-radius:14px;padding:12px 18px;font:inherit;font-weight:600;cursor:pointer;background:var(--surface2);color:var(--text)}
-.btn:active{transform:scale(.98)}
-.btn.primary{background:var(--accent);color:var(--accent-ink)}
-.btn.big{width:100%;padding:16px;font-size:1.1rem;border-radius:16px}
-.btn.danger{background:color-mix(in srgb,var(--danger) 15%,transparent);color:var(--danger)}
+.pill.dim{background:var(--surface2);color:var(--muted)}
+.btn{appearance:none;border:0;border-radius:16px;padding:12px 18px;font:inherit;font-weight:700;cursor:pointer;background:var(--surface2);color:var(--text);transition:transform .12s,filter .12s}
+.btn:active{transform:scale(.96);filter:brightness(1.1)}
+.btn.primary{background:linear-gradient(135deg,var(--t1),var(--t2));color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25);box-shadow:0 8px 22px color-mix(in srgb,var(--t2) 40%,transparent)}
+.btn.danger{background:color-mix(in srgb,var(--danger) 16%,transparent);color:var(--danger)}
 .btn.ghost{background:transparent;border:1px solid var(--line)}
-.rhythm{font-size:1.9rem;font-weight:700;letter-spacing:.02em;margin:.1em 0}
-.dots{display:flex;gap:8px;margin:12px 0 6px}
-.dot{flex:1;height:10px;border-radius:6px;background:var(--surface2);border:1px solid var(--line)}
-.dot.on{background:var(--ok);border-color:var(--ok)}
-.dot.today{outline:2px solid var(--ok);outline-offset:2px}
-.banner{border-radius:14px;padding:12px 14px;margin:0 0 14px;font-size:.92rem;display:flex;gap:10px;align-items:flex-start}
+.banner{border-radius:18px;padding:12px 14px;margin:0 0 14px;font-size:.92rem;display:flex;gap:10px;align-items:flex-start}
 .banner.warn{background:color-mix(in srgb,var(--warn) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--warn) 40%,transparent)}
-.banner.info{background:var(--accent-soft);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent)}
 .banner .x{margin-left:auto;background:none;border:0;color:inherit;font-size:1.2rem;cursor:pointer;line-height:1}
-ol.steps{padding-left:1.2em;margin:.3em 0}
-ol.steps li{margin:.25em 0}
+ol.steps{padding-left:1.2em;margin:.3em 0} ol.steps li{margin:.25em 0}
+
+/* views */
+section.view{display:none}
+section.view.active{display:block;animation:viewIn .32s ease-out both}
+@keyframes viewIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* home */
+.hello{display:flex;justify-content:space-between;align-items:flex-end;margin:6px 2px 16px}
+.hello h1{margin:0}
+.chips{display:flex;gap:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font:inherit;font-weight:800;font-size:.9rem;color:var(--text);cursor:pointer}
+.chip.fire{background:color-mix(in srgb,#ff7a2c 16%,var(--surface));border-color:color-mix(in srgb,#ff7a2c 40%,transparent);color:#ff9a4c}
+.chip.med{background:color-mix(in srgb,#ffd25a 14%,var(--surface));border-color:color-mix(in srgb,#ffd25a 40%,transparent);color:#e8b430}
+.goal{display:flex;gap:14px;align-items:center;padding:14px 16px}
+.goal svg{width:62px;height:62px;flex:none}
+.goal .gt{font-weight:800}
+.week{display:flex;justify-content:space-between;gap:4px;margin:-4px 0 14px;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
+.wd{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);font-weight:600;flex:1}
+.wd i{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-style:normal;font-size:.8rem;color:transparent}
+.wd.done i{background:linear-gradient(135deg,var(--t1),var(--t2));border-color:transparent;color:#fff;box-shadow:0 0 12px color-mix(in srgb,var(--t1) 50%,transparent)}
+.wd.today{color:var(--text)} .wd.today i{border-color:var(--t1)}
+.wd.future{opacity:.45}
+.hero{position:relative;overflow:hidden;border-radius:28px;padding:20px;margin:0 0 14px;color:#f6f3ea;
+  background:radial-gradient(circle at 88% 12%,color-mix(in srgb,var(--t1) 70%,transparent),transparent 46%),radial-gradient(circle at 100% 100%,color-mix(in srgb,var(--t2) 75%,transparent),transparent 60%),linear-gradient(160deg,#16202b,#0c1117);
+  box-shadow:0 18px 44px color-mix(in srgb,var(--t2) 28%,transparent);border:1px solid color-mix(in srgb,var(--t1) 30%,transparent)}
+.hero .art{position:absolute;right:-18px;top:-14px;width:170px;height:170px;opacity:.95;filter:drop-shadow(0 8px 24px rgba(0,0,0,.4));animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(8px) rotate(4deg)}}
+.hero .badge{display:inline-block;background:#f6f3ea;color:#0c1117;font-size:.68rem;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:999px}
+.hero h2{font-size:1.6rem;margin:76px 0 2px;position:relative}
+.hero .lv{opacity:.85;font-weight:600;position:relative}
+.hero .rhythm{font-size:2rem;font-weight:800;letter-spacing:.01em;margin:10px 0 0;position:relative}
+.hero .legend{opacity:.7;font-size:.8rem;position:relative}
+.hero .go{width:100%;margin-top:16px;padding:16px;border-radius:18px;background:#f6f3ea;color:#0c1117;font-size:1.08rem;font-weight:800;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.35);animation:pulseBtn 2.6s ease-in-out infinite}
+@keyframes pulseBtn{0%,100%{box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 0 0 rgba(246,243,234,.45)}50%{box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 0 10px rgba(246,243,234,0)}}
+.hero .meta{display:flex;justify-content:space-between;font-size:.82rem;margin-top:10px;opacity:.85;position:relative}
+.hero .meta a{color:#f6f3ea}
+.status{font-size:.9rem;margin:0 4px 6px}
+.hscroll{display:flex;gap:12px;overflow-x:auto;padding:2px 16px 8px;margin:0 -16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.hscroll::-webkit-scrollbar{display:none}
+.tcard{flex:none;width:150px;scroll-snap-align:start;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:12px;cursor:pointer;font:inherit;color:inherit;text-align:left}
+.tcard .tile{aspect-ratio:1.25;border-radius:14px;background:#1a222c;display:grid;place-items:center;margin-bottom:10px;position:relative;overflow:hidden}
+:root[data-theme="light"] .tcard .tile{background:#202a35}
+.tcard .tile svg{width:64%;height:auto}
+.tcard.cur{border-color:color-mix(in srgb,var(--t1) 60%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--t1) 25%,transparent)}
+.tcard.lock .tile svg{filter:grayscale(1);opacity:.35}
+.tcard .lk{position:absolute;right:8px;top:8px;font-size:.9rem}
+.tcard b{display:block;font-size:.92rem;line-height:1.2}
+.tcard span{font-size:.76rem;color:var(--muted)}
+.recent{display:flex;gap:12px;overflow-x:auto;padding:2px 16px 8px;margin:0 -16px;scrollbar-width:none}
+.recent::-webkit-scrollbar{display:none}
+.recent svg{width:64px;height:64px;flex:none;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
 
 /* nav */
-nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:20}
-nav.tabs .in{display:flex;max-width:720px;width:100%}
-nav.tabs button{flex:1;background:none;border:0;color:var(--muted);font:inherit;font-size:.72rem;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;cursor:pointer;border-radius:12px}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:0 10px calc(10px + env(safe-area-inset-bottom));pointer-events:none}
+nav.tabs .in{pointer-events:auto;display:flex;align-items:center;max-width:540px;margin:0 auto;background:color-mix(in srgb,var(--surface) 86%,transparent);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:26px;padding:6px;box-shadow:0 12px 34px rgba(0,0,0,.4)}
+nav.tabs button{flex:1;background:none;border:0;color:var(--muted);font:inherit;font-size:.68rem;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;cursor:pointer;border-radius:18px;transition:color .2s,transform .12s}
+nav.tabs button:active{transform:scale(.92)}
 nav.tabs button svg{width:24px;height:24px}
-nav.tabs button.active{color:var(--accent);background:var(--accent-soft)}
-section.view{display:none}
-section.view.active{display:block}
+nav.tabs button.active{color:var(--accent-text)}
+nav.tabs button.fab{flex:none;width:64px;height:64px;border-radius:50%;margin:-26px 6px 0;background:linear-gradient(135deg,var(--t1),var(--t2));color:#fff;box-shadow:0 10px 26px color-mix(in srgb,var(--t2) 55%,transparent),0 0 0 5px var(--bg);justify-content:center;font-size:0}
+nav.tabs button.fab svg{width:30px;height:30px}
+nav.tabs button.fab.active{color:#fff}
 
-/* program map */
-.tech{margin-bottom:16px}
-.levels{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
-.lv{border:1px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center;font-size:.72rem;background:var(--surface2);color:var(--muted)}
-.lv b{display:block;font-size:.85rem;color:var(--text)}
-.lv.done{background:color-mix(in srgb,var(--ok) 14%,var(--surface));border-color:color-mix(in srgb,var(--ok) 50%,transparent)}
-.lv.cur{background:var(--accent-soft);border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent)}
+/* progress */
+.path{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:14px;position:relative;overflow:hidden}
+.path::before{content:"";position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c1) 35%,transparent),transparent 70%)}
+.path .hd{display:flex;align-items:center;gap:12px;position:relative}
+.path .hd svg{width:46px;height:46px;flex:none}
+.path .hd b{font-size:1.05rem}
+.path svg.trail{width:100%;max-width:360px;display:block;margin:6px auto 0}
+.path .pulse{animation:nodePulse 1.8s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+@keyframes nodePulse{0%,100%{transform:scale(1);opacity:.55}50%{transform:scale(1.5);opacity:0}}
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.stat{background:var(--surface2);border-radius:14px;padding:12px}
-.stat b{display:block;font-size:1.5rem}
+.stat{background:var(--surface2);border-radius:18px;padding:14px}
+.stat b{display:block;font-size:1.7rem;font-weight:800;background:linear-gradient(135deg,var(--t1),var(--t2));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hist{list-style:none;padding:0;margin:0}
-.hist li{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.hist li{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.9rem}
 .hist li:last-child{border-bottom:0}
 
 /* medals */
-.medals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-@media (min-width:560px){.medals{grid-template-columns:repeat(4,1fr)}}
-.medal{background:none;border:0;color:inherit;font:inherit;text-align:center;cursor:pointer;padding:6px 2px;border-radius:14px;position:relative}
-.medal svg{width:100%;max-width:110px;height:auto;display:block;margin:0 auto 6px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.18))}
-.medal.locked svg{filter:grayscale(1);opacity:.32}
-.medal .nm{font-size:.8rem;font-weight:600;line-height:1.2}
-.medal .cnt{position:absolute;top:4px;right:10%;background:var(--accent);color:var(--accent-ink);border-radius:999px;font-size:.72rem;font-weight:700;padding:1px 7px}
-.recent{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px}
-.recent svg{width:56px;height:56px;flex:none}
+.mhead{display:flex;align-items:center;gap:14px}
+.mhead .big{font-size:2.4rem;font-weight:800;line-height:1;background:linear-gradient(135deg,#ffe08a,#e8962a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mbar{height:8px;border-radius:6px;background:var(--surface2);overflow:hidden;margin-top:8px}
+.mbar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,#ffe08a,#e8962a)}
+.medals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 10px}
+.medal{background:none;border:0;color:inherit;font:inherit;text-align:center;cursor:pointer;padding:4px 2px;border-radius:14px;position:relative;transition:transform .15s}
+.medal:active{transform:scale(.93)}
+.medal svg{width:100%;max-width:104px;height:auto;display:block;margin:0 auto 6px}
+.medal:not(.locked) svg{filter:drop-shadow(0 0 14px color-mix(in srgb,var(--glow,#ffd25a) 55%,transparent)) drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+.medal.locked svg{filter:grayscale(1);opacity:.28}
+.medal .nm{font-size:.78rem;font-weight:700;line-height:1.2}
+.medal.locked .nm{color:var(--muted)}
+.medal .pg{height:5px;border-radius:4px;background:var(--surface2);margin:6px 14% 2px;overflow:hidden}
+.medal .pg i{display:block;height:100%;background:linear-gradient(90deg,var(--t1),var(--t2));border-radius:4px}
+.medal .pt{font-size:.68rem;color:var(--muted)}
+.medal .cnt{position:absolute;top:0;right:8%;background:linear-gradient(135deg,var(--t1),var(--t2));color:#fff;border-radius:999px;font-size:.72rem;font-weight:800;padding:1px 7px}
 
 /* theory */
-details{border:1px solid var(--line);border-radius:14px;background:var(--surface);margin:0 0 10px;box-shadow:var(--shadow)}
-details>summary{cursor:pointer;padding:14px 16px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details{border:1px solid var(--line);border-radius:18px;background:var(--surface);margin:0 0 10px}
+details>summary{cursor:pointer;padding:15px 16px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
 details>summary::-webkit-details-marker{display:none}
-details>summary::after{content:"+";font-size:1.3rem;color:var(--muted)}
+details>summary::after{content:"+";font-size:1.3rem;color:var(--accent-text);flex:none}
 details[open]>summary::after{content:"–"}
 details .body{padding:0 16px 14px}
 details .body ul,details .body ol{padding-left:1.2em}
 .tag{font-size:.75rem;color:var(--muted);font-weight:500}
 
 /* settings */
-.field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
 .field:last-child{border-bottom:0}
-.seg{display:flex;background:var(--surface2);border-radius:12px;padding:3px}
-.seg button{border:0;background:none;font:inherit;padding:7px 12px;border-radius:10px;cursor:pointer;color:var(--muted)}
-.seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.12);font-weight:600}
-input[type=number],input[type=time]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface2);color:var(--text);width:96px}
+.seg{display:flex;background:var(--surface2);border-radius:14px;padding:3px}
+.seg button{border:0;background:none;font:inherit;padding:7px 12px;border-radius:11px;cursor:pointer;color:var(--muted);font-size:.9rem}
+.seg button.on{background:linear-gradient(135deg,var(--t1),var(--t2));color:#fff;font-weight:700}
+input[type=number],input[type=time]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);color:var(--text);width:96px;color-scheme:dark}
+:root[data-theme="light"] input{color-scheme:light}
 input[type=time]{width:140px}
-input[type=range]{width:140px}
-.switch{position:relative;width:48px;height:28px;flex:none}
+input[type=range]{width:140px;accent-color:var(--t1)}
+.switch{position:relative;width:50px;height:30px;flex:none}
 .switch input{opacity:0;width:0;height:0}
-.switch span{position:absolute;inset:0;background:var(--line);border-radius:999px;transition:.2s;cursor:pointer}
-.switch span::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
-.switch input:checked+span{background:var(--ok)}
+.switch span{position:absolute;inset:0;background:var(--surface2);border:1px solid var(--line);border-radius:999px;transition:.2s;cursor:pointer}
+.switch span::after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 2px 5px rgba(0,0,0,.3)}
+.switch input:checked+span{background:linear-gradient(135deg,var(--t1),var(--t2));border-color:transparent}
 .switch input:checked+span::after{transform:translateX(20px)}
 .times{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-.times .row{gap:8px}
 
-/* session overlay */
-#session{position:fixed;inset:0;background:var(--bg);z-index:50;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:20px 16px calc(20px + env(safe-area-inset-bottom))}
-#session.on{display:flex}
+/* session */
+#session{position:fixed;inset:0;background:#070a0e;color:#f3f0e7;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(18px + env(safe-area-inset-top)) 18px calc(22px + env(safe-area-inset-bottom));overflow:hidden}
+#session.on{display:flex;animation:viewIn .35s ease-out both}
+#session .glow{position:absolute;left:50%;top:44%;width:120vmax;height:120vmax;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,var(--orb,var(--inhale)) 0%,transparent 60%);opacity:.34;transition:opacity .8s;pointer-events:none}
+#session>*:not(.glow){position:relative}
 #session .top{width:100%;max-width:520px;display:flex;justify-content:space-between;align-items:center}
-#session .stage{position:relative;width:min(78vw,340px);aspect-ratio:1;display:grid;place-items:center}
-#session .stage svg.ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-#orb{width:82%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.55),transparent 55%),var(--orb,var(--inhale));box-shadow:0 0 60px color-mix(in srgb,var(--orb,var(--inhale)) 55%,transparent);will-change:transform;display:grid;place-items:center}
-#orbNum{font-size:3.2rem;font-weight:800;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.25)}
-#phaseLabel{font-size:1.6rem;font-weight:700;text-align:center;min-height:2.2em}
-#phaseSub{color:var(--muted);text-align:center;min-height:1.5em}
+#sTech{background:rgba(255,255,255,.12);color:#f3f0e7}
+#sProgress{font-size:.9rem;opacity:.8;font-variant-numeric:tabular-nums}
+#session .mid{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+#session .stage{position:relative;width:min(84vw,360px,48vh);aspect-ratio:1;display:grid;place-items:center}
+.ringc{position:absolute;border-radius:50%;background:var(--orb,var(--inhale));will-change:transform;transition:background-color .7s}
+#ring3{inset:0;opacity:.10}
+#ring2{inset:11%;opacity:.16}
+#orb{position:absolute;inset:22%;border-radius:50%;background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.5),transparent 55%),var(--orb,var(--inhale));box-shadow:0 0 70px var(--orb,var(--inhale));will-change:transform;transition:background-color .7s,box-shadow .7s}
+#session .center{position:relative;text-align:center;text-shadow:0 2px 14px rgba(0,0,0,.45);pointer-events:none}
+#phaseLabel{font-size:1.5rem;font-weight:800;letter-spacing:-.01em}
+#orbNum{font-size:3.4rem;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;min-height:1em}
+#phaseSub{opacity:.75;text-align:center;min-height:1.5em;font-size:.95rem}
 .nostrils[hidden]{display:none}
-.nostrils{display:flex;gap:28px;justify-content:center;margin-top:6px;min-height:58px}
-.nos{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.8rem;color:var(--muted)}
-.nos i{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:block;transition:.25s}
+.nostrils{display:flex;gap:28px;justify-content:center;min-height:58px}
+.nos{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:.8rem;opacity:.8}
+.nos i{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,.3);display:block;transition:.25s}
 .nos.on i{background:var(--inhale);border-color:var(--inhale);box-shadow:0 0 16px var(--inhale)}
 .nos.on.ex i{background:var(--exhale);border-color:var(--exhale);box-shadow:0 0 16px var(--exhale)}
-.nos.off i{background:var(--surface2);border-style:dashed}
-#session .controls{display:flex;gap:10px;width:100%;max-width:520px}
-#session .controls .btn{flex:1}
+.nos.off i{border-style:dashed;opacity:.5}
+#session .bottom{width:100%;max-width:520px}
+.sbar{height:5px;border-radius:4px;background:rgba(255,255,255,.14);overflow:hidden;margin-bottom:16px}
+.sbar i{display:block;height:100%;width:0;border-radius:4px;background:#f3f0e7}
+#session .controls{display:flex;gap:10px}
+#session .controls .btn{flex:1;background:rgba(255,255,255,.12);color:#f3f0e7;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#session .controls .btn.danger{background:rgba(255,107,107,.18);color:#ff9a9a}
 
-/* modal */
-#modal{position:fixed;inset:0;background:rgba(5,8,18,.55);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}
+/* modal, toast, coin, confetti, onboarding */
+#modal{position:fixed;inset:0;background:rgba(3,5,10,.66);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);z-index:60;display:none;align-items:center;justify-content:center;padding:16px}
 #modal.on{display:flex}
-#modal .box{background:var(--surface);color:var(--text);border-radius:22px;max-width:460px;width:100%;max-height:88vh;overflow:auto;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center}
+#modal .box{background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:28px;max-width:440px;width:100%;max-height:88vh;overflow:auto;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.5);text-align:center;animation:boxIn .35s cubic-bezier(.2,1.3,.4,1) both}
+@keyframes boxIn{from{opacity:0;transform:scale(.85) translateY(20px)}to{opacity:1;transform:none}}
 #modal .box svg.medal-svg{width:130px;height:130px}
+#modal .box .done-ic{width:74px;height:74px;border-radius:50%;margin:0 auto 12px;display:grid;place-items:center;font-size:2rem;color:#fff;background:linear-gradient(135deg,var(--t1),var(--t2));box-shadow:0 10px 30px color-mix(in srgb,var(--t2) 50%,transparent)}
 .newmedals{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:12px 0}
-.newmedals div{width:120px}
-.newmedals div{text-align:center}
-@keyframes pop{0%{transform:scale(.3) rotate(-20deg);opacity:0}70%{transform:scale(1.1)}100%{transform:none;opacity:1}}
+.newmedals div{width:120px;text-align:center}
+#toast{position:fixed;left:50%;bottom:calc(110px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:14px;font-size:.9rem;font-weight:600;z-index:70;opacity:0;pointer-events:none;transition:opacity .3s;max-width:calc(100% - 32px)}
+#toast.on{opacity:1}
 .coin3d{perspective:700px;display:inline-block;cursor:pointer;margin:4px auto}
 .coin3d .coin{position:relative;width:150px;height:150px;transform-style:preserve-3d}
 .coin3d.sm .coin{width:96px;height:96px}
@@ -167,20 +233,26 @@ input[type=range]{width:140px}
 .coin3d .edge{position:absolute;inset:2%;border-radius:50%;background:linear-gradient(90deg,#7c5810,#e8c25a 45%,#fff0b0 50%,#c9952f 60%,#6b4a0c)}
 .coin3d .back{transform:rotateY(180deg) translateZ(6px)}
 .coin3d .front{transform:translateZ(6px)}
-.coin3d .hint{font-size:.75rem;color:var(--muted);margin-top:4px}
-#toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.9rem;z-index:70;opacity:0;pointer-events:none;transition:opacity .3s;max-width:calc(100% - 32px)}
-#toast.on{opacity:1}
+#confetti{position:fixed;inset:0;z-index:80;pointer-events:none}
+#onb{position:fixed;inset:0;z-index:90;background:#070a0e;color:#f3f0e7;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:calc(20px + env(safe-area-inset-top)) 24px calc(26px + env(safe-area-inset-bottom));overflow:hidden}
+#onb .bgl{position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--oc,#2fd3c0) 40%,transparent),transparent 62%);transition:background .6s;pointer-events:none}
+#onb>*:not(.bgl){position:relative}
+#onb .skip{align-self:flex-end;background:none;border:0;color:#f3f0e7;opacity:.7;font:inherit;cursor:pointer;padding:8px}
+#onb .slide{text-align:center;max-width:380px;animation:viewIn .4s ease-out both}
+#onb .art{height:220px;display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:26px}
+#onb .art .o{position:absolute;border-radius:50%;background:#2fd3c0;animation:breathe 5s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.7)}50%{transform:scale(1)}}
+#onb h2{font-size:1.9rem;margin-bottom:10px}
+#onb p{opacity:.8;font-size:1.05rem}
+#onb .dotsn{display:flex;gap:8px;justify-content:center;margin-bottom:18px}
+#onb .dotsn i{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:.3s}
+#onb .dotsn i.on{width:26px;background:#f3f0e7}
+#onb .next{width:100%;max-width:380px;padding:17px;border-radius:18px;border:0;font:inherit;font-weight:800;font-size:1.08rem;background:#f3f0e7;color:#0c1117;cursor:pointer}
+#onb .ft{width:100%;display:flex;flex-direction:column;align-items:center}
+@media (prefers-reduced-motion: reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 </style>
 </head>
 <body>
-
-<header class="top">
-  <div class="logo" aria-hidden="true"></div>
-  <div>
-    <h1>Дыхание</h1>
-    <div class="sub">Пранаяма шаг за шагом</div>
-  </div>
-</header>
 
 <main class="wrap">
   <section class="view active" id="v-practice"></section>
@@ -192,24 +264,24 @@ input[type=range]{width:140px}
 
 <nav class="tabs">
   <div class="in">
-    <button data-tab="practice" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/></svg>Практика</button>
     <button data-tab="progress"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16M6 16l4-5 3 3 5-7"/></svg>Прогресс</button>
     <button data-tab="medals"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14" r="6"/><path d="M8.5 9 6 3h4l2 4 2-4h4l-2.5 6"/></svg>Медали</button>
+    <button data-tab="practice" class="fab active" aria-label="Практика"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9" opacity=".5"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.8" fill="currentColor"/></svg>Практика</button>
     <button data-tab="theory"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg>Теория</button>
     <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6A7 7 0 0 0 19 12z"/></svg>Настройки</button>
   </div>
 </nav>
 
 <div id="session" role="dialog" aria-label="Сессия дыхания">
+  <div class="glow"></div>
   <div class="top">
     <span class="pill" id="sTech"></span>
-    <span class="muted" id="sProgress"></span>
+    <span id="sProgress"></span>
   </div>
-  <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
-    <div id="phaseLabel">Приготовьтесь</div>
+  <div class="mid">
     <div class="stage">
-      <svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47" fill="none" stroke="var(--line)" stroke-width="2.5"/><circle id="ringArc" cx="50" cy="50" r="47" fill="none" stroke="var(--orb,var(--inhale))" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="295.3" stroke-dashoffset="295.3"/></svg>
-      <div id="orb"><span id="orbNum"></span></div>
+      <div class="ringc" id="ring3"></div><div class="ringc" id="ring2"></div><div id="orb"></div>
+      <div class="center"><div id="phaseLabel">Приготовьтесь</div><div id="orbNum"></div></div>
     </div>
     <div id="phaseSub"></div>
     <div class="nostrils" id="nostrils" hidden>
@@ -217,9 +289,12 @@ input[type=range]{width:140px}
       <div class="nos" id="nosR"><i></i>правая</div>
     </div>
   </div>
-  <div class="controls">
-    <button class="btn ghost" id="btnPause">Пауза</button>
-    <button class="btn danger" id="btnStop">Завершить</button>
+  <div class="bottom">
+    <div class="sbar"><i id="sBar"></i></div>
+    <div class="controls">
+      <button class="btn" id="btnPause">Пауза</button>
+      <button class="btn danger" id="btnStop">Завершить</button>
+    </div>
   </div>
 </div>
 
@@ -232,17 +307,17 @@ input[type=range]{width:140px}
 
 /* ================= ДАННЫЕ ================= */
 const TECH = [
-  { id:'box', name:'Квадратное дыхание',
+  { id:'box', name:'Квадратное дыхание', c:['#2fd3c0','#2b7fe0'],
     levels:[[4,4,4,4],[4,5,4,5],[4,6,4,6],[5,6,5,6],[6,6,6,6]],
     legend:'вдох – задержка – выдох – пауза, сек',
     fmt:l=>l.join(' – '),
     how:['Сядьте ровно, плечи расслаблены, дышите носом.','Вдох на счёт — живот и грудь мягко наполняются.','Задержка на вдохе без напряжения в горле.','Плавный выдох на тот же счёт.','Пауза на выдохе — и новый цикл.'] },
-  { id:'av', name:'Анулома-вилома',
+  { id:'av', name:'Анулома-вилома', c:['#b06bff','#ff6fb1'],
     levels:[[4,0,4],[4,0,8],[4,4,8],[4,8,8],[5,10,10]],
     legend:'вдох – задержка – выдох, сек',
     fmt:l=>l.join(' – '),
     how:['Правая рука в Вишну-мудре: указательный и средний пальцы согнуты.','Большой палец закрывает правую ноздрю, безымянный — левую.','Вдох левой → (задержка) → выдох правой.','Вдох правой → (задержка) → выдох левой. Это один цикл.','Подсказки на экране показывают, какая ноздря открыта.'] },
-  { id:'kb', name:'Капалабхати',
+  { id:'kb', name:'Капалабхати', c:['#ff9a3c','#ff4d5e'],
     levels:[[20,2],[30,2],[40,1.5],[50,1],[60,1]],
     legend:'выдохов за раунд · темп',
     fmt:l=>`${l[0]} × 1 в ${String(l[1]).replace('.',',')} с`,
@@ -271,7 +346,7 @@ const MASTERY = ['turtle','swan','dragon'];
 const LS_STATE='bw1.state', LS_SET='bw1.settings', LS_REM='bw1.remFired';
 const DEF_STATE = {v:1, tech:0, level:0, levelStart:null, levelDays:[], allDays:[], sessions:0,
   medals:{}, pendingPhoenix:false, history:[], notice:null, finished:false};
-const DEF_SET = {mode:'cycles', cycles:3, minutes:3, phaseSound:true, metro:'click', volume:0.6, remindersOn:false, reminders:['08:00','20:00'], theme:'auto'};
+const DEF_SET = {mode:'cycles', cycles:3, minutes:3, phaseSound:true, metro:'click', volume:0.6, remindersOn:false, reminders:['08:00','20:00'], theme:'dark', onboarded:false};
 function load(k,def){ try{ const v=JSON.parse(localStorage.getItem(k)); return v?Object.assign(structuredClone(def),v):structuredClone(def);}catch(e){return structuredClone(def);} }
 function save(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
 let S = load(LS_STATE, DEF_STATE);
@@ -512,13 +587,14 @@ function showTab(name){
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 function render(){
   applyEvaluation(today());
+  const tc=TECH[S.tech].c; document.documentElement.style.setProperty('--t1',tc[0]); document.documentElement.style.setProperty('--t2',tc[1]);
   ({practice:renderPractice,progress:renderProgress,medals:renderMedals,theory:renderTheory,settings:renderSettings})[currentTab]();
 }
 
 /* ================= ЭКРАН: ПРАКТИКА ================= */
 function cycleDuration(ti,lv,isLast){return buildCycle(ti,lv,isLast).reduce((a,p)=>a+p.d,0);}
 function sessionSummary(){
-  if(SET.mode==='time') return `${SET.minutes} ${plural(SET.minutes,'минута','минуты','минут')} (таймер)`;
+  if(SET.mode==='time') return `${SET.minutes} ${plural(SET.minutes,'минута','минуты','минут')} · таймер`;
   let total=0;for(let i=1;i<=SET.cycles;i++) total+=cycleDuration(S.tech,S.level,i===SET.cycles);
   const m=Math.floor(total/60), s=Math.round(total%60);
   return `${SET.cycles} ${plural(SET.cycles,'цикл','цикла','циклов')} · ≈ ${m?m+' мин ':''}${s} с`;
@@ -526,82 +602,120 @@ function sessionSummary(){
 function statusLine(){
   const t=today(), n=S.levelDays.length;
   if(S.finished) return {cls:'ok',text:'Все уровни программы пройдены. Продолжайте практику — скоро добавим новые техники.'};
-  if(!n) return {cls:'',text:'Первая практика запустит отсчёт: нужно 7 дней практики, пропускать можно не больше 1 дня подряд.'};
+  if(!n) return {cls:'',text:'Первая практика запустит отсчёт: 7 дней, пропуск — не больше 1 дня подряд.'};
   const last=S.levelDays[n-1];
   if(last===t) return {cls:'ok',text:`Сегодня засчитано ✓ Следующая практика — завтра (в крайнем случае послезавтра).`};
   const skipped=diff(last,t)-1;
   if(skipped===1) return {cls:'warn',text:'Вчера был пропуск. Сегодня практика обязательна — иначе счётчик дней обнулится.'};
   return {cls:'',text:`Сегодня будет день ${n+1} из 7.`};
 }
+function greeting(){const h=nowDate().getHours();return h<5?'Доброй ночи':h<12?'Доброе утро':h<18?'Добрый день':'Добрый вечер';}
+function techArt(ti){
+  const [a,b]=TECH[ti].c, g='ta'+(++uid);
+  const body=[
+   `<rect x="24" y="24" width="52" height="52" rx="13" fill="none" stroke="url(#${g})" stroke-width="7"/><rect x="38" y="38" width="24" height="24" rx="7" fill="url(#${g})" opacity=".3"/><circle cx="76" cy="24" r="8" fill="#fff"/>`,
+   `<path d="M18 50 C18 28 44 28 50 50 C56 72 82 72 82 50 C82 28 56 28 50 50 C44 72 18 72 18 50 Z" fill="none" stroke="url(#${g})" stroke-width="7" stroke-linejoin="round"/><circle cx="50" cy="50" r="7.5" fill="#fff"/>`,
+   `<path d="M50 14 C58 30 74 40 70 61 C68 76 58 86 50 86 C40 86 28 77 30 61 C31 52 37 47 40 40 C44 47 47 47 47 40 C47 30 50 24 50 14 Z" fill="url(#${g})"/><path d="M50 52 C55 60 60 64 58 72 C57 78 53 81 50 81 C46 81 42 77 43 71 C44 65 48 60 50 52 Z" fill="#fff" opacity=".85"/>`
+  ][ti];
+  return `<svg viewBox="0 0 100 100"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>${body}</svg>`;
+}
+const techDone=ti=>ti<S.tech||(S.finished&&ti===S.tech);
 function renderPractice(){
   const T=TECH[S.tech], L=T.levels[S.level], t=today(), n=S.levelDays.length;
   const st=statusLine();
-  let dots='';for(let i=0;i<7;i++){const on=i<n;const isT=on&&S.levelDays[i]===t;dots+=`<div class="dot ${on?'on':''} ${isT?'today':''}"></div>`;}
   const earned=MEDALS.filter(m=>S.medals[m.id]).sort((a,b)=>S.medals[b.id].first.localeCompare(S.medals[a.id].first));
+  const dow=(nowDate().getDay()+6)%7, mon=addDays(t,-dow), names=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+  const week=names.map((nm,i)=>{const k=addDays(mon,i),done=S.allDays.includes(k);return `<div class="wd ${done?'done':''} ${k===t?'today':''} ${k>t?'future':''}"><i>✓</i>${nm}</div>`;}).join('');
+  const C=150.8, frac=S.finished?1:n/7;
+  const ring=`<svg viewBox="0 0 60 60"><defs><linearGradient id="gr" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${T.c[0]}"/><stop offset="1" stop-color="${T.c[1]}"/></linearGradient></defs>
+    <circle cx="30" cy="30" r="24" fill="none" stroke="var(--surface2)" stroke-width="7"/>
+    <circle cx="30" cy="30" r="24" fill="none" stroke="url(#gr)" stroke-width="7" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${(C*(1-frac)).toFixed(1)}" transform="rotate(-90 30 30)"/>
+    <text x="30" y="36" text-anchor="middle" font-size="17" font-weight="800" fill="currentColor">${S.finished?'✓':n}</text></svg>`;
+  const cards=TECH.map((X,ti)=>{
+    const done=techDone(ti), cur=ti===S.tech&&!S.finished, lock=ti>S.tech;
+    return `<button class="tcard ${cur?'cur':''} ${lock?'lock':''}" data-go="progress"><div class="tile">${techArt(ti)}${lock?'<span class="lk">🔒</span>':''}</div><b>${X.name}</b><span>${done?'Освоено ✓':cur?`Уровень ${S.level+1} из 5`:'Впереди'}</span></button>`;
+  }).join('');
   $('#v-practice').innerHTML=`
+   <div class="hello"><div><div class="muted small">${greeting()}</div><h1>Дыхание</h1></div>
+     <div class="chips"><span class="chip fire">🔥 ${currentStreak()}</span><button class="chip med" data-go="medals">🏅 ${earned.length}</button></div></div>
    ${S.notice?`<div class="banner warn"><div>${S.notice.text}</div><button class="x" id="dismiss" aria-label="Закрыть">×</button></div>`:''}
-   <div class="card">
-     <div class="row between"><span class="pill">${T.name}</span><span class="muted small">Техника ${S.tech+1} из ${TECH.length}</span></div>
-     <h2 style="margin-top:12px">Уровень ${S.level+1} из ${LEVELS_PER_TECH}</h2>
+   <div class="card goal">${ring}<div><div class="gt">${S.finished?'Программа пройдена':`Цель уровня: ${n} из 7 дней`}</div>
+     <div class="small" style="color:${st.cls==='warn'?'var(--warn)':st.cls==='ok'?'var(--ok)':'var(--muted)'}">${st.text}</div></div></div>
+   <div class="week">${week}</div>
+   <div class="hero">
+     <div class="art">${techArt(S.tech)}</div>
+     <span class="badge">СЕГОДНЯ</span>
+     <h2>${T.name}</h2>
+     <div class="lv">Уровень ${S.level+1} из ${LEVELS_PER_TECH}</div>
      <div class="rhythm">${T.fmt(L)}</div>
-     <div class="muted small">${T.legend}</div>
-     ${S.finished?'':`<div class="dots">${dots}</div>
-     <div class="row between small"><span><b>${n}</b> из 7 дней${S.levelStart?` · начат ${fmtDate(S.levelStart)}`:''}</span></div>`}
-     <p class="small" style="color:${st.cls==='warn'?'var(--warn)':st.cls==='ok'?'var(--ok)':'var(--muted)'}">${st.text}</p>
-     <button class="btn primary big" id="start">Начать практику</button>
-     <div class="row between small" style="margin-top:10px"><span class="muted">${sessionSummary()}</span><a href="#" id="toSettings">изменить</a></div>
+     <div class="legend">${T.legend}</div>
+     <button class="btn go" id="start">▶&nbsp; Начать практику</button>
+     <div class="meta"><span>${sessionSummary()}</span><a href="#" data-go="settings">изменить</a></div>
    </div>
-   <div class="card">
-     <h3>Как выполнять</h3>
-     <ol class="steps small">${T.how.map(s=>`<li>${s}</li>`).join('')}</ol>
-     <a href="#" id="toTheory" class="small">Подробнее в разделе «Теория» →</a>
-   </div>
-   <div class="card">
-     <div class="row between"><h3 style="margin:0">Медали</h3><a href="#" id="toMedals" class="small">${earned.length} из ${MEDALS.length} →</a></div>
-     ${earned.length?`<div class="recent" style="margin-top:10px">${earned.slice(0,8).map(medalSVG).join('')}</div>`:`<p class="muted small">Завершите первую сессию — и получите первую медаль.</p>`}
-   </div>`;
+   <h3 class="sec">Программа <a href="#" data-go="progress">Все уровни →</a></h3>
+   <div class="hscroll">${cards}</div>
+   <h3 class="sec">Как выполнять <a href="#" data-go="theory">Теория →</a></h3>
+   <div class="card"><ol class="steps small">${T.how.map(s=>`<li>${s}</li>`).join('')}</ol></div>
+   <h3 class="sec">Медали <a href="#" data-go="medals">${earned.length} из ${MEDALS.length} →</a></h3>
+   ${earned.length?`<div class="recent">${earned.slice(0,10).map(medalSVG).join('')}</div>`:`<div class="card muted small">Завершите первую сессию — и получите первую медаль.</div>`}`;
   $('#start').onclick=startSession;
-  $('#toSettings').onclick=e=>{e.preventDefault();showTab('settings');};
-  $('#toTheory').onclick=e=>{e.preventDefault();showTab('theory');};
-  $('#toMedals').onclick=e=>{e.preventDefault();showTab('medals');};
+  document.querySelectorAll('#v-practice [data-go]').forEach(el=>el.onclick=e=>{e.preventDefault();showTab(el.dataset.go);});
   const d=$('#dismiss'); if(d) d.onclick=()=>{S.notice=null;saveS();render();};
 }
 
 /* ================= ЭКРАН: ПРОГРЕСС ================= */
+function trailSVG(ti){
+  const T=TECH[ti], [a,b]=T.c, g='tr'+(++uid), xs=[46,104,150,104,46], H=78, pts=xs.map((x,i)=>[x,38+i*H]);
+  const d='M'+pts.map((p,i)=>{ if(!i) return p.join(' '); const q=pts[i-1]; return `C${q[0]} ${q[1]+H/2} ${p[0]} ${p[1]-H/2} ${p[0]} ${p[1]}`;}).join(' ');
+  const nodes=pts.map((p,i)=>{
+    const done=ti<S.tech||(ti===S.tech&&(i<S.level||S.finished)), cur=!S.finished&&ti===S.tech&&i===S.level;
+    const lbl=T.fmt(T.levels[i]);
+    return `${cur?`<circle class="pulse" cx="${p[0]}" cy="${p[1]}" r="26" fill="${a}"/>`:''}
+     <circle cx="${p[0]}" cy="${p[1]}" r="25" fill="${done||cur?`url(#${g})`:'var(--surface2)'}" stroke="${done||cur?'rgba(255,255,255,.35)':'var(--line)'}" stroke-width="2"/>
+     <text x="${p[0]}" y="${p[1]+6}" text-anchor="middle" font-size="${done?19:17}" font-weight="800" fill="${done||cur?'#fff':'var(--muted)'}">${done?'✓':cur?i+1:'🔒'}</text>
+     <text x="${p[0]+38}" y="${p[1]-3}" font-size="12" font-weight="700" fill="${done||cur?'var(--text)':'var(--muted)'}">Уровень ${i+1}${cur?` · день ${S.levelDays.length}/7`:''}</text>
+     <text x="${p[0]+38}" y="${p[1]+14}" font-size="12.5" fill="var(--muted)">${lbl}</text>`;
+  }).join('');
+  return `<svg class="trail" viewBox="0 0 320 ${H*4+76}"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs>
+   <path d="${d}" fill="none" stroke="var(--line)" stroke-width="5" stroke-dasharray="2 11" stroke-linecap="round"/>${nodes}</svg>`;
+}
 function renderProgress(){
   const map=TECH.map((T,ti)=>{
-    const lv=T.levels.map((L,li)=>{
-      const done = ti<S.tech || (ti===S.tech && (li<S.level || S.finished));
-      const cur = !S.finished && ti===S.tech && li===S.level;
-      return `<div class="lv ${done?'done':''} ${cur?'cur':''}"><b>${done?'✓':li+1}</b>${T.fmt(L).replace(/ × 1 в .*/,'')}</div>`;
-    }).join('');
-    const state = ti<S.tech||(S.finished&&ti===S.tech)?'<span class="pill ok">освоено</span>':ti===S.tech?'<span class="pill">сейчас</span>':'<span class="pill" style="opacity:.6">впереди</span>';
-    return `<div class="tech"><div class="row between"><b>${ti+1}. ${T.name}</b>${state}</div><div class="levels">${lv}</div></div>`;
+    const done=techDone(ti), cur=ti===S.tech&&!S.finished;
+    const state=done?'<span class="pill ok">освоено</span>':cur?'<span class="pill">сейчас</span>':'<span class="pill dim">🔒 впереди</span>';
+    return `<div class="path" style="--c1:${T.c[0]}"><div class="hd">${techArt(ti)}<div style="flex:1"><b>${T.name}</b><div class="small muted">Техника ${ti+1} из ${TECH.length}</div></div>${state}</div>${trailSVG(ti)}</div>`;
   }).join('');
   const hist=S.history.slice(0,12).map(h=>`<li><span>${fmtDate(h.date)} · ${TECH[h.tech].name}, ур. ${h.level+1}</span><span class="muted">${Math.floor(h.dur/60)}:${String(h.dur%60).padStart(2,'0')}</span></li>`).join('');
   $('#v-progress').innerHTML=`
-   <div class="card"><h2>Программа</h2>
-     <p class="muted small">Каждый уровень — 7 дней практики. Пропускать можно не больше одного дня подряд; иначе счётчик дней обнуляется, а уровень сохраняется.</p>
-     ${map}</div>
-   <div class="card"><h2>Статистика</h2>
-     <div class="stats">
-       <div class="stat"><b>${S.sessions}</b><span class="muted small">сессий</span></div>
-       <div class="stat"><b>${S.allDays.length}</b><span class="muted small">дней практики</span></div>
-       <div class="stat"><b>${currentStreak()}</b><span class="muted small">дней подряд сейчас</span></div>
-       <div class="stat"><b>${bestStreak()}</b><span class="muted small">лучшая серия</span></div>
-     </div></div>
-   <div class="card"><h2>Последние сессии</h2>${hist?`<ul class="hist">${hist}</ul>`:'<p class="muted small">Пока пусто.</p>'}</div>`;
+   <h1 class="page-title">Прогресс</h1>
+   <div class="stats" style="margin-bottom:14px">
+     <div class="stat"><b>🔥 ${currentStreak()}</b><span class="muted small">дней подряд</span></div>
+     <div class="stat"><b>${bestStreak()}</b><span class="muted small">лучшая серия</span></div>
+     <div class="stat"><b>${S.sessions}</b><span class="muted small">сессий</span></div>
+     <div class="stat"><b>${S.allDays.length}</b><span class="muted small">дней практики</span></div>
+   </div>
+   <p class="muted small" style="margin:0 4px 12px">Уровень = 7 дней практики. Пропуск — не больше 1 дня подряд, иначе счётчик дней обнуляется (уровень сохраняется).</p>
+   ${map}
+   <h3 class="sec">Последние сессии</h3>
+   <div class="card">${hist?`<ul class="hist">${hist}</ul>`:'<span class="muted small">Пока пусто.</span>'}</div>`;
 }
 
 /* ================= ЭКРАН: МЕДАЛИ ================= */
+function medalProgress(id){
+  const st=currentStreak(), lv=ti=>techDone(ti)?5:(ti===S.tech?S.level:0);
+  switch(id){case 'first':return [S.sessions,1];case 'panther':return [st,7];case 'wolf':return [st,14];case 'elephant':return [S.allDays.length,30];
+    case 'lion':return [S.sessions,100];case 'turtle':return [lv(0),5];case 'swan':return [lv(1),5];case 'dragon':return [lv(2),5];}
+  return null;
+}
 function renderMedals(){
   const n=MEDALS.filter(m=>S.medals[m.id]).length;
-  $('#v-medals').innerHTML=`<div class="card"><div class="row between"><h2 style="margin:0">Медали</h2><span class="pill">${n} из ${MEDALS.length}</span></div>
-   <p class="muted small">Нажмите на медаль, чтобы узнать условие.</p>
-   <div class="medals">${MEDALS.map(m=>{const e=S.medals[m.id];return `<button class="medal ${e?'':'locked'}" data-id="${m.id}">${medalSVG(m)}${e&&m.id==='star'&&e.count>1?`<span class="cnt">×${e.count}</span>`:''}<div class="nm">${m.name}</div></button>`;}).join('')}</div></div>`;
+  $('#v-medals').innerHTML=`<h1 class="page-title">Медали</h1>
+   <div class="card"><div class="mhead"><div class="big">${n}</div><div style="flex:1"><b>из ${MEDALS.length} медалей</b><div class="mbar"><i style="width:${(n/MEDALS.length*100).toFixed(0)}%"></i></div></div></div></div>
+   <div class="card"><div class="medals">${MEDALS.map(m=>{const e=S.medals[m.id], p=e?null:medalProgress(m.id);
+     return `<button class="medal ${e?'':'locked'}" data-id="${m.id}" style="--glow:${m.c1}">${medalSVG(m)}${e&&m.id==='star'&&e.count>1?`<span class="cnt">×${e.count}</span>`:''}<div class="nm">${m.name}</div>${p?`<div class="pg"><i style="width:${Math.min(100,p[0]/p[1]*100).toFixed(0)}%"></i></div><div class="pt">${Math.min(p[0],p[1])} / ${p[1]}</div>`:''}</button>`;}).join('')}</div></div>`;
   document.querySelectorAll('.medal').forEach(b=>b.onclick=()=>{
     const m=medalById(b.dataset.id), e=S.medals[m.id];
-    openModal(`${e?coinHTML(m)+'<div class="muted small">нажмите на медаль, чтобы повернуть</div>':`<div style="filter:grayscale(1);opacity:.4">${medalSVG(m)}</div>`}<h2>${m.name}</h2><p>${m.cond}</p>
+    openModal(`${e?coinHTML(m)+'<div class="muted small">нажмите на медаль, чтобы повернуть</div>':`<div style="filter:grayscale(1);opacity:.4">${medalSVG(m)}</div>`}<h2 style="margin-top:10px">${m.name}</h2><p>${m.cond}</p>
      <p class="muted small">${e?`Получена ${fmtDate(e.first)}${m.id==='star'?` · всего: ${e.count}`:''}`:'Ещё не получена'}</p>
      <button class="btn primary" data-close>Понятно</button>`,()=>bindCoins($('#modalBox')));
   });
@@ -612,7 +726,7 @@ function renderTheory(){
   if($('#v-theory').dataset.ready) return;
   $('#v-theory').dataset.ready='1';
   $('#v-theory').innerHTML=`
-  <div class="card"><h2>Теория</h2><p class="muted small">Что такое прана, зачем работать с дыханием и как выполнять каждую технику программы.</p></div>
+  <h1 class="page-title">Теория</h1><p class="muted small" style="margin:-8px 4px 14px">Что такое прана, зачем работать с дыханием и как выполнять каждую технику программы.</p>
 
   <details open><summary>Что такое прана</summary><div class="body">
    <p><b>Прана</b> (санскр. «жизненная сила», от <i>пра</i> — «вперёд, наполнение» и <i>ан</i> — «дышать, жить») — в йоге так называют энергию, которая поддерживает жизнь. Она присутствует в воздухе, пище, солнечном свете, а главным её проводником считается дыхание.</p>
@@ -734,6 +848,7 @@ function renderTheory(){
 function renderSettings(){
   const perm = ('Notification' in window) ? Notification.permission : 'unsupported';
   $('#v-settings').innerHTML=`
+   <h1 class="page-title">Настройки</h1>
    <div class="card"><h2>Сессия</h2>
      <div class="field"><span>Режим</span><div class="seg"><button data-mode="cycles" class="${SET.mode==='cycles'?'on':''}">По циклам</button><button data-mode="time" class="${SET.mode==='time'?'on':''}">По времени</button></div></div>
      ${SET.mode==='cycles'
@@ -752,7 +867,12 @@ function renderSettings(){
      <p class="small muted" style="margin-top:10px">Уведомления браузера: ${perm==='granted'?'разрешены ✓':perm==='denied'?'запрещены — разрешите их в настройках сайта':perm==='unsupported'?'не поддерживаются, будет показано сообщение на странице':'не запрошены'}</p>
    </div>
    <div class="card"><h2>Оформление</h2>
-     <div class="field"><span>Тема</span><div class="seg"><button data-theme="auto" class="${SET.theme==='auto'?'on':''}">Авто</button><button data-theme="light" class="${SET.theme==='light'?'on':''}">Светлая</button><button data-theme="dark" class="${SET.theme==='dark'?'on':''}">Тёмная</button></div></div>
+     <div class="field"><span>Тема</span><div class="seg"><button data-theme="dark" class="${SET.theme!=='light'?'on':''}">Тёмная</button><button data-theme="light" class="${SET.theme==='light'?'on':''}">Светлая</button></div></div>
+   </div>
+   <div class="card"><h2>Установить как приложение</h2>
+     <p class="muted small"><b>iPhone (Safari):</b> кнопка «Поделиться» → «На экран „Домой“».<br><b>Android (Chrome):</b> меню ⋮ → «Установить приложение» или «Добавить на главный экран».</p>
+     <p class="muted small">После установки приложение открывается с иконки, на весь экран, без адресной строки.</p>
+     ${installEvt?'<button class="btn primary" id="installBtn">Установить</button>':''}
    </div>
    <div class="card"><h2>Данные</h2>
      <p class="muted small">Прогресс хранится только в этом браузере на этом устройстве.</p>
@@ -771,11 +891,13 @@ function renderSettings(){
   document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{SET.reminders.splice(+b.dataset.del,1);saveSet();renderSettings();});
   $('#addTime').onclick=()=>{SET.reminders.push('12:00');saveSet();renderSettings();};
   $('#testRem').onclick=async()=>{ensureAudio();if('Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission();}catch(_){}}fireReminder(true);renderSettings();};
+  const ib=$('#installBtn'); if(ib) ib.onclick=async()=>{try{installEvt.prompt();await installEvt.userChoice;}catch(e){}installEvt=null;renderSettings();};
   $('#resetAll').onclick=()=>openModal(`<h2>Сбросить прогресс?</h2><p>Уровни, дни, история и медали будут удалены. Настройки сохранятся.</p>
      <div class="row" style="justify-content:center"><button class="btn" data-close>Отмена</button><button class="btn danger" id="confirmReset">Сбросить</button></div>`,
      ()=>{$('#confirmReset').onclick=()=>{S=structuredClone(DEF_STATE);saveS();closeModal();toast('Прогресс сброшен');showTab('practice');};});
 }
-function applyTheme(){ if(SET.theme==='auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme',SET.theme); }
+let installEvt=null; window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if(currentTab==='settings')renderSettings();});
+function applyTheme(){ const light=SET.theme==='light'; if(light) document.documentElement.setAttribute('data-theme','light'); else document.documentElement.removeAttribute('data-theme'); const m=document.querySelector('meta[name=theme-color]'); if(m) m.content=light?'#f5efe2':'#0a0e13'; }
 
 /* ================= НАПОМИНАНИЯ ================= */
 function fireReminder(test){
@@ -804,9 +926,9 @@ function buildCycle(ti,lv,isLast){
   if(ti===1){const [a,b,c]=L;return [ph('inhale',a,'Вдох левой','L'),ph('hold',b,'Задержка','-'),ph('exhale',c,'Выдох правой','R'),
     ph('inhale',a,'Вдох правой','R'),ph('hold',b,'Задержка','-'),ph('exhale',c,'Выдох левой','L')].filter(p=>p.d>0);}
   const [n,iv]=L, arr=[ph('prep',4,'Глубокий вдох')];
-  for(let i=1;i<=n;i++) arr.push(Object.assign(ph('pump',iv,'Резкий выдох'),{n:i,of:n}));
+  for(let i=1;i<=n;i++) arr.push(Object.assign(ph('pump',iv,'Выдох'),{n:i,of:n}));
   arr.push(ph('exhale',3,'Полный выдох'));
-  if(!isLast) arr.push(ph('rest',30,'Отдых — спокойное дыхание'));
+  if(!isLast) arr.push(ph('rest',30,'Отдых'));
   return arr;
 }
 const ORB={ready:'--pause',inhale:'--inhale',prep:'--inhale',hold:'--hold',exhale:'--exhale',pause:'--pause',pump:'--pump',rest:'--rest'};
@@ -824,6 +946,7 @@ function startSession(){
   $('#sTech').textContent=`${TECH[ti].name} · ур. ${lv+1}`;
   $('#nostrils').hidden = ti!==1;
   $('#btnPause').textContent='Пауза';
+  $('#sBar').style.width='0%';
   $('#session').classList.add('on');
   nextPhase(); requestAnimationFrame(frame);
 }
@@ -839,10 +962,10 @@ function nextPhase(){
   document.getElementById('session').style.setProperty('--orb',`var(${ORB[k]})`);
   $('#phaseLabel').textContent=R.cur.label;
   let sub='';
-  if(k==='pump') sub=`${R.cur.n} / ${R.cur.of}`;
+  if(k==='pump') sub=`из ${R.cur.of}`;
   else if(k==='ready') sub='Сядьте ровно, расслабьте плечи';
   else if(k==='hold'&&R.ti===1) sub='обе ноздри закрыты';
-  else if(k==='rest') sub='Наблюдайте за ощущениями';
+  else if(k==='rest') sub='Спокойное дыхание. Наблюдайте за ощущениями';
   $('#phaseSub').textContent=sub;
   if(R.ti===1){
     const L=$('#nosL'),Rn=$('#nosR'); L.className='nos';Rn.className='nos';
@@ -884,9 +1007,12 @@ function frame(ts){
     }
   }
   const p=Math.min(1,R.phaseEl/R.cur.d);
-  $('#orb').style.transform=`scale(${scaleFor(R.cur,p).toFixed(4)})`;
-  $('#ringArc').setAttribute('stroke-dashoffset',(295.3*(1-p)).toFixed(1));
-  const left=R.cur.k==='pump'?'':Math.ceil(R.cur.d-R.phaseEl);
+  const sc=scaleFor(R.cur,p), u=(sc-MIN)/(MAX-MIN);
+  $('#orb').style.transform=`scale(${sc.toFixed(4)})`;
+  $('#ring2').style.transform=`scale(${(0.66+0.34*u).toFixed(4)})`;
+  $('#ring3').style.transform=`scale(${(0.74+0.26*u).toFixed(4)})`;
+  $('#sBar').style.width=(Math.min(1,R.mode==='time'?R.practice/R.limit:R.practice/R.total)*100).toFixed(1)+'%';
+  const left=R.cur.k==='pump'?R.cur.n:Math.ceil(R.cur.d-R.phaseEl);
   $('#orbNum').textContent=left;
   if(R.mode==='time') $('#sProgress').textContent=`Осталось ${fmtClock(R.limit-R.practice)}`;
   else $('#sProgress').textContent=R.cur.k==='ready'?`${R.cycles} ${plural(R.cycles,'цикл','цикла','циклов')}`:`Цикл ${R.cycle} из ${R.cycles} · ${fmtClock(R.total-R.practice)}`;
@@ -913,8 +1039,42 @@ function finishSession(completed){
   }else if(res.dayCounted){ lv=`<p>День засчитан: <b>${S.levelDays.length} из 7</b>.</p>`; }
   else if(!S.finished){ lv=`<p class="muted">Сегодняшний день уже был засчитан ранее. Отличная дополнительная практика!</p>`; }
   const medals=res.fresh.length?`<h3 style="margin-top:14px">Новые медали</h3><div class="newmedals">${res.fresh.map(id=>{const m=medalById(id);return `<div>${coinHTML(m,true)}<div class="small"><b>${m.name}</b></div></div>`;}).join('')}</div>`:'';
-  openModal(`<h2>Сессия завершена ✓</h2><p class="muted">Длительность ${fmtClock(r.practice)}</p>${lv}${medals}<button class="btn primary" data-close>Отлично</button>`,()=>bindCoins($('#modalBox')));
+  confetti(!!(res.levelUp||res.fresh.length));
+  openModal(`<div class="done-ic">✓</div><h2>Сессия завершена</h2><p class="muted">Длительность ${fmtClock(r.practice)}</p>${lv}${medals}<button class="btn primary" data-close>Отлично</button>`,()=>bindCoins($('#modalBox')));
   render();
+}
+
+/* ================= КОНФЕТТИ ================= */
+function confetti(big){
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c=document.createElement('canvas');c.id='confetti';document.body.appendChild(c);
+  const x=c.getContext('2d'),W=c.width=innerWidth,H=c.height=innerHeight;
+  const cols=['#2fd3c0','#ffd25a','#ff6fb1','#b06bff','#ff9a3c','#f3f0e7','#3a8ef0'], N=big?170:80;
+  const ps=Array.from({length:N},()=>({x:W/2+(Math.random()-.5)*W*.5,y:H*.4,vx:(Math.random()-.5)*16,vy:-Math.random()*15-4,r:Math.random()*7+4,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6.28,va:(Math.random()-.5)*.5}));
+  const t0=performance.now();
+  (function f(t){const e=(t-t0)/1000;x.clearRect(0,0,W,H);
+    ps.forEach(p=>{p.vy+=.36;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.globalAlpha=Math.max(0,1-e/3.2);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/3,p.r,p.r*.6);x.restore();});
+    if(e<3.2) requestAnimationFrame(f); else c.remove();})(t0);
+}
+
+/* ================= ПРИВЕТСТВИЕ ================= */
+function onboarding(){
+  const slides=[
+   {c:'#2fd3c0',art:`<div class="o" style="width:210px;height:210px;opacity:.14"></div><div class="o" style="width:150px;height:150px;opacity:.25;animation-delay:.15s"></div><div class="o" style="width:92px;height:92px;box-shadow:0 0 60px #2fd3c0;animation-delay:.3s"></div>`,
+    h:'Дыши осознанно',p:'Несколько минут в день — и больше спокойствия, энергии и ясности в голове.'},
+   {c:'#b06bff',art:[0,1,2].map(i=>`<div style="width:92px;height:92px;border-radius:24px;background:#161e28;display:grid;place-items:center;border:1px solid rgba(255,255,255,.12)"><div style="width:62px">${techArt(i)}</div></div>`).join(''),
+    h:'Программа шаг за шагом',p:'Три техники по 5 уровней. Каждый уровень — 7 дней практики. Сложность растёт постепенно.'},
+   {c:'#ffb02e',art:['first','panther','dragon'].map((id,i)=>`<div style="width:${i===1?118:86}px">${medalSVG(medalById(id))}</div>`).join(''),
+    h:'Собирай медали',p:'За регулярность и достижения. Не пропускай больше одного дня подряд — и переходи на новый уровень.'}];
+  let i=0; const el=document.createElement('div'); el.id='onb'; document.body.appendChild(el);
+  const done=()=>{SET.onboarded=true;saveSet();el.remove();};
+  const draw=()=>{const s=slides[i]; el.style.setProperty('--oc',s.c);
+    el.innerHTML=`<div class="bgl"></div><button class="skip">Пропустить</button>
+     <div class="slide"><div class="art">${s.art}</div><h2>${s.h}</h2><p>${s.p}</p></div>
+     <div class="ft"><div class="dotsn">${slides.map((_,k)=>`<i class="${k===i?'on':''}"></i>`).join('')}</div><button class="next">${i<slides.length-1?'Далее':'Начать'}</button></div>`;
+    el.querySelector('.skip').onclick=done;
+    el.querySelector('.next').onclick=()=>{ if(i<slides.length-1){i++;draw();} else done(); };};
+  draw();
 }
 
 /* ================= МОДАЛКА / ТОСТ ================= */
@@ -927,6 +1087,8 @@ let toastT;function toast(t){const el=$('#toast');el.textContent=t;el.classList.
 BW.state=()=>S; BW.complete=completeSession; BW.render=render; BW.reset=()=>{S=structuredClone(DEF_STATE);saveS();render();};
 applyTheme();
 render();
+if(!SET.onboarded) onboarding();
+if('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(()=>{});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&!R)render();});
 })();
 </script>
