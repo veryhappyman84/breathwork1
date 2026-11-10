@@ -165,6 +165,10 @@ details .body ul,details .body ol{padding-left:1.2em}
 /* settings */
 .field{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
 .field:last-child{border-bottom:0}
+.field.col{flex-direction:column;align-items:stretch;gap:8px}
+.seg.wide button{flex:1}
+.seg button{white-space:nowrap}
+.field>span:first-child{min-width:0}
 .seg{display:flex;background:var(--surface2);border-radius:14px;padding:3px}
 .seg button{border:0;background:none;font:inherit;padding:7px 12px;border-radius:11px;cursor:pointer;color:var(--muted);font-size:.9rem}
 .seg button.on{background:linear-gradient(135deg,var(--t1),var(--t2));color:#fff;font-weight:700}
@@ -557,7 +561,31 @@ function bindCoins(root){
 
 /* ================= ЗВУК ================= */
 let AC=null;
-function ensureAudio(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();}catch(e){}}
+// iPhone в беззвучном режиме глушит звук страницы. Переводим звук в режим «воспроизведение»:
+// через audioSession (новые iOS) или через тихий зацикленный аудио-элемент (старые iOS).
+let keepEl=null, keepT=null;
+function silentWavURL(){const n=4000,b=new Uint8Array(44+n),v=new DataView(b.buffer),w=(o,t)=>{for(let i=0;i<t.length;i++)b[o+i]=t.charCodeAt(i);};
+  w(0,'RIFF');v.setUint32(4,36+n,true);w(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,8000,true);v.setUint32(28,8000,true);v.setUint16(32,1,true);v.setUint16(34,8,true);w(36,'data');v.setUint32(40,n,true);b.fill(128,44);
+  return URL.createObjectURL(new Blob([b],{type:'audio/wav'}));}
+function playbackMode(on){
+  try{
+    if(navigator.audioSession){ navigator.audioSession.type = on ? 'playback' : 'auto'; return; }
+    clearTimeout(keepT);
+    if(on){ if(!keepEl){keepEl=new Audio(silentWavURL());keepEl.loop=true;keepEl.setAttribute('playsinline','');} const pr=keepEl.play(); if(pr&&pr.catch)pr.catch(()=>{}); }
+    else if(keepEl){ keepT=setTimeout(()=>{try{keepEl.pause();}catch(e){}},4000); }
+  }catch(e){}
+}
+function ensureAudio(){
+  try{
+    playbackMode(true);
+    if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==='running') return Promise.resolve(true);
+    const r=AC.resume();
+    return Promise.race([Promise.resolve(r).then(()=>AC.state==='running'), new Promise(ok=>setTimeout(()=>ok(AC.state==='running'),1500))]).catch(()=>false);
+  }catch(e){return Promise.resolve(false);}
+}
+// первое касание страницы «будит» звук заранее
+['touchend','click'].forEach(ev=>document.addEventListener(ev,function once(){document.removeEventListener(ev,once,true);try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state!=='running')AC.resume();const b=AC.createBuffer(1,1,22050),src=AC.createBufferSource();src.buffer=b;src.connect(AC.destination);src.start(0);}catch(e){}},true));
 function tone(freq,dur=0.18,vol=0.25,delay=0,type='sine'){
   if(!AC) return; const t=AC.currentTime+delay, o=AC.createOscillator(), g=AC.createGain();
   o.type=type;o.frequency.value=freq;const v=vol*SET.volume;
@@ -572,7 +600,7 @@ function metroTick(n,cur){
   if(n===1) return; // начало фазы уже отмечено звуком смены фазы
   tone(n%2?1500:1300,0.035,0.32,0,'square');
 }
-function chime(){ensureAudio();[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,1.2,0.3,i*0.22));}
+function chime(){return ensureAudio().then(ok=>{[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,1.2,0.3,i*0.22));return ok;});}
 const PHASE_FREQ={inhale:523.25,prep:523.25,hold:392,exhale:440,pause:329.6,rest:349.2};
 
 /* ================= ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ================= */
@@ -850,14 +878,15 @@ function renderSettings(){
   $('#v-settings').innerHTML=`
    <h1 class="page-title">Настройки</h1>
    <div class="card"><h2>Сессия</h2>
-     <div class="field"><span>Режим</span><div class="seg"><button data-mode="cycles" class="${SET.mode==='cycles'?'on':''}">По циклам</button><button data-mode="time" class="${SET.mode==='time'?'on':''}">По времени</button></div></div>
+     <div class="field col"><span>Режим</span><div class="seg wide"><button data-mode="cycles" class="${SET.mode==='cycles'?'on':''}">По циклам</button><button data-mode="time" class="${SET.mode==='time'?'on':''}">По времени</button></div></div>
      ${SET.mode==='cycles'
        ?`<div class="field"><span>Количество циклов<br><span class="muted small">рекомендуется 3</span></span><input type="number" id="cycles" min="1" max="100" value="${SET.cycles}"></div>`
        :`<div class="field"><span>Длительность, минут<br><span class="muted small">рекомендуется 3; таймер с обратным отсчётом</span></span><input type="number" id="minutes" min="1" max="60" value="${SET.minutes}"></div>`}
-     <div class="field"><span>Метроном счёта<br><span class="muted small">каждую секунду</span></span><div class="seg"><button data-metro="off" class="${SET.metro==='off'?'on':''}">Выкл</button><button data-metro="click" class="${SET.metro==='click'?'on':''}">Щелчки</button><button data-metro="voice" class="${SET.metro==='voice'?'on':''}">Голос</button></div></div>
+     <div class="field col"><span>Метроном счёта <span class="muted small">· каждую секунду</span></span><div class="seg wide"><button data-metro="off" class="${SET.metro==='off'?'on':''}">Выкл</button><button data-metro="click" class="${SET.metro==='click'?'on':''}">Щелчки</button><button data-metro="voice" class="${SET.metro==='voice'?'on':''}">Голос</button></div></div>
      <div class="field"><span>Звук смены фаз</span><label class="switch"><input type="checkbox" id="phaseSound" ${SET.phaseSound?'checked':''}><span></span></label></div>
      <div class="field"><span>Громкость</span><input type="range" id="volume" min="0" max="1" step="0.05" value="${SET.volume}"></div>
      <div class="field"><span>Сигнал окончания</span><button class="btn ghost" id="testChime">Проверить</button></div>
+     <p class="muted small" style="margin:8px 0 0">Не слышно звука? Прибавьте громкость кнопками телефона (громкость «медиа»). На iPhone звук должен играть и в беззвучном режиме.</p>
    </div>
    <div class="card"><h2>Напоминания</h2>
      <p class="muted small">Работают, пока страница открыта в браузере (можно оставить её во вкладке). Полноценные напоминания появятся в мобильном приложении.</p>
@@ -879,13 +908,15 @@ function renderSettings(){
      <button class="btn danger" id="resetAll">Сбросить весь прогресс</button>
    </div>`;
   document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{SET.mode=b.dataset.mode;saveSet();renderSettings();});
-  document.querySelectorAll('[data-metro]').forEach(b=>b.onclick=()=>{SET.metro=b.dataset.metro;saveSet();renderSettings();if(SET.metro==='click'){ensureAudio();tone(1600,0.035,0.35,0,'square');}else if(SET.metro==='voice')say('раз, два, три');});
+  document.querySelectorAll('[data-metro]').forEach(b=>b.onclick=()=>{SET.metro=b.dataset.metro;saveSet();renderSettings();if(SET.metro==='click'){ensureAudio().then(()=>{[0,.5,1].forEach(d=>tone(1500,0.035,0.35,d,'square'));});}else if(SET.metro==='voice')say('раз, два, три');});
   document.querySelectorAll('[data-theme]').forEach(b=>b.onclick=()=>{SET.theme=b.dataset.theme;saveSet();applyTheme();renderSettings();});
   const num=(id,key,min,max)=>{const el=$(id);if(el)el.onchange=()=>{let v=Math.round(+el.value)||min;v=Math.min(max,Math.max(min,v));el.value=v;SET[key]=v;saveSet();};};
   num('#cycles','cycles',1,100); num('#minutes','minutes',1,60);
   $('#phaseSound').onchange=e=>{SET.phaseSound=e.target.checked;saveSet();};
   $('#volume').oninput=e=>{SET.volume=+e.target.value;saveSet();};
-  $('#testChime').onclick=chime;
+  $('#testChime').onclick=async e=>{const b=e.currentTarget;if(b.disabled)return;b.disabled=true;b.textContent='Играет…';b.classList.add('primary');
+    const ok=await chime(); if(!ok) toast('Звук не запустился. Проверьте громкость и беззвучный режим.');
+    setTimeout(()=>{b.disabled=false;b.textContent='Проверить';b.classList.remove('primary');if(!R)playbackMode(false);},1800);};
   $('#remOn').onchange=async e=>{SET.remindersOn=e.target.checked;saveSet();if(SET.remindersOn&&'Notification' in window&&Notification.permission==='default'){try{await Notification.requestPermission();}catch(_){}}renderSettings();};
   document.querySelectorAll('#times input').forEach(inp=>inp.onchange=()=>{SET.reminders[+inp.dataset.i]=inp.value;saveSet();});
   document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{SET.reminders.splice(+b.dataset.del,1);saveSet();renderSettings();});
@@ -1026,7 +1057,7 @@ $('#btnStop').onclick=()=>{
    ()=>{$('#contS').onclick=()=>{closeModal();if(R){R.paused=was;R.last=performance.now();}};$('#quitS').onclick=()=>{closeModal();finishSession(false);};});
 };
 function finishSession(completed){
-  const r=R; R=null; unlockScreen();
+  const r=R; R=null; unlockScreen(); setTimeout(()=>{if(!R)playbackMode(false);},4000);
   $('#session').classList.remove('on');
   if(!completed){toast('Сессия прервана');render();return;}
   chime();
